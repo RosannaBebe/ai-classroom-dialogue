@@ -1,0 +1,690 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AI 老师、AI 助教与 AI 学生的课堂设计讨论：学生 Persona、能力与记忆、状态更新、学习规则及研发落地。">
+  <meta name="theme-color" content="#f6f5ef">
+  <title>三 Agent 课堂 · 设计对话</title>
+  <style>:root{--bg:#f6f5ef;--paper:#fffefa;--ink:#243c34;--muted:#66766e;--line:#dce1d7;--green:#315d49;--accent:#dae6bf;--mono:ui-monospace,SFMono-Regular,Consolas,monospace}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:92px}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;-webkit-font-smoothing:antialiased}button,input{font:inherit}a{color:inherit}button,a,input{-webkit-tap-highlight-color:transparent}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #96ac65;outline-offset:4px}button{color:var(--ink)}[hidden]{display:none!important}.reading-progress{position:fixed;inset:0 auto auto 0;height:3px;width:0;background:#7d9c53;z-index:20}.skip-link{position:fixed;top:-100px;left:20px;z-index:30;background:white;padding:14px}.skip-link:focus{top:10px}.topbar{height:74px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 4vw;gap:24px;background:var(--bg);position:sticky;top:0;z-index:10}.brand{display:flex;align-items:center;gap:10px;font-size:12px;letter-spacing:1.7px;text-decoration:none;font-weight:750}.brand-icon{width:30px;height:30px;display:grid;place-items:center;background:var(--ink);color:var(--bg);border-radius:7px;font-size:17px}.edition{margin-left:auto;font-size:12px;color:var(--muted)}.source{font-size:12px;text-decoration:none;border-left:1px solid var(--line);padding-left:24px}.layout{max-width:1370px;margin:auto;display:grid;grid-template-columns:275px minmax(0,1fr);gap:68px;padding:0 4vw}.sidebar{border-right:1px solid var(--line);padding-right:26px}.sidebar-inner{position:sticky;top:106px;max-height:calc(100vh - 125px);overflow-y:auto;padding-bottom:16px}.small-label{font-size:11px;letter-spacing:1.5px;color:var(--muted);font-weight:650}.search-box{display:flex;align-items:center;gap:8px;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px;margin-top:12px}.search-box>span{font-size:21px;line-height:1}.search-box input{width:100%;min-width:0;border:0;background:transparent;color:var(--ink);font-size:13px;outline:none}.search-box:focus-within{border-color:var(--green)}kbd{font-size:11px;color:var(--muted);border:1px solid var(--line);padding:0 5px;border-radius:3px}.search-status{font-size:11px;color:var(--muted);min-height:16px}.contents-label{margin-top:30px;margin-bottom:14px}.toc{display:flex;flex-direction:column;gap:4px}.toc a{display:flex;align-items:baseline;gap:10px;padding:10px 9px;font-size:12px;line-height:1.6;text-decoration:none;border-radius:6px;color:#56675e}.toc a>span{font:10px var(--mono);color:#7b897f}.toc a:hover{background:#eaece1}.toc a.active{background:#e1e8d5;color:#274c36;font-weight:650}.sidebar-bottom{border-top:1px solid var(--line);margin-top:27px;padding-top:20px;display:flex;flex-direction:column;gap:15px;font-size:12px;color:var(--muted)}.sidebar-bottom a{text-decoration:none}.sidebar-bottom button{background:none;border:0;text-align:left;padding:0;color:inherit}.sidebar-bottom a:hover,.sidebar-bottom button:hover{color:var(--green)}main{min-width:0;max-width:900px}.hero{padding:64px 0 34px}.eyebrow{font-size:12px;letter-spacing:1.5px;display:flex;align-items:center;gap:9px;color:var(--green)}.eyebrow>span{height:7px;width:7px;background:#8caa5c;border-radius:50%}h1{font-size:clamp(38px,4.4vw,62px);line-height:1.2;font-weight:650;letter-spacing:-2px;margin:25px 0 24px}h1 em{font-family:Georgia,serif;font-weight:400;color:#597849}.hero-description{font-size:15px;line-height:1.9;color:var(--muted);margin:0}.roles{display:flex;flex-wrap:wrap;gap:9px;margin-top:25px}.roles>span{background:var(--paper);border:1px solid var(--line);border-radius:24px;padding:8px 12px;font-size:11px;display:flex;align-items:center;gap:7px}.role-dot{width:6px;height:6px;border-radius:50%;display:inline-block}.teacher{background:#557656}.assistant{background:#c8a16a}.student{background:#879cb8}.hero-meta{display:flex;flex-wrap:wrap;gap:20px;margin-top:34px;color:var(--muted);font-size:11px}.hero-meta span+span{border-left:1px solid var(--line);padding-left:20px}.reading-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:19px 0;border-top:1px solid var(--line);font-size:11px;color:var(--muted)}.reading-toolbar button{border:0;background:none;font-size:11px;padding:6px 0 6px 16px;color:var(--muted)}.reading-toolbar button:hover{text-decoration:underline}.chapter{margin:8px 0 42px;scroll-margin-top:94px}.chapter-heading{display:flex;align-items:center;gap:13px;margin-bottom:17px}.chapter-number{font:12px var(--mono);color:#71856b}.chapter-heading h2{font-size:20px;line-height:1.5;letter-spacing:-.3px;font-weight:650;margin:0}.copy-link{margin-left:auto;flex-shrink:0;border:1px solid var(--line);border-radius:50%;width:29px;height:29px;background:transparent;font-size:16px;color:var(--muted)}.copy-link:hover{background:var(--accent)}.question{background:#e8edde;border:1px solid #dce3ce;border-radius:12px;padding:21px 25px;margin-bottom:12px}.speaker{font-size:11px;font-weight:700;letter-spacing:1px;color:#5c7155}.question .speaker{margin-bottom:10px}.answer{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:0 25px}.answer summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:19px 0}.answer summary::-webkit-details-marker{display:none}.answer .speaker{color:#7b806f}.toggle-hint{font-size:10px;color:#7d877e}.answer[open] summary{border-bottom:1px solid #eceee5;margin-bottom:20px}.answer .prose{padding-bottom:15px}.prose{font-size:14px;line-height:1.95;color:#35453b;overflow-wrap:anywhere}.prose>:first-child{margin-top:0}.prose p{margin:0 0 18px}.question .prose p:last-child{margin:0}.prose ul,.prose ol{padding-left:23px;margin:14px 0 20px}.prose li{padding-left:3px;margin:6px 0}.prose li p{margin:8px 0}.prose strong{font-weight:650;color:#254735}.prose a{color:#3c765a;text-decoration:underline;text-decoration-color:#adbf9e;text-underline-offset:3px}.prose blockquote{margin:20px 0;padding:12px 17px;border-left:3px solid #91a86d;background:#f2f4e9;color:#506048}.prose blockquote p:last-child{margin-bottom:0}.prose code{font-family:var(--mono);font-size:.87em;background:#edf0e5;padding:2px 5px;border-radius:4px}.prose pre{background:#20352e;color:#e4eadf;padding:20px;border-radius:9px;overflow-x:auto;font-size:12px;line-height:1.8;max-width:100%;white-space:pre;overflow-wrap:normal}.prose pre code{font-size:inherit;color:inherit;background:none;padding:0;border:0}.snapshot-note{font-size:12px;color:var(--muted);padding:3px 4px}#empty{border:1px dashed var(--line);padding:32px;border-radius:12px;color:var(--muted);font-size:14px}footer{border-top:1px solid var(--line);padding:30px 0 50px;color:var(--muted);font-size:11px;line-height:1.9}.footer-mark{font:11px var(--mono);letter-spacing:1px}footer p{max-width:640px}footer a{text-underline-offset:4px}#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:white;padding:12px 22px;border-radius:8px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:30}#toast.visible{opacity:1}
+@media(min-width:1450px){.layout{padding:0 45px}.hero{padding-top:75px}}@media(max-width:1050px){.layout{grid-template-columns:215px minmax(0,1fr);gap:30px;padding:0 25px}.sidebar{padding-right:18px}.chapter-heading h2{font-size:18px}.toc a{font-size:11px}.question,.answer{padding-left:20px;padding-right:20px}}@media(max-width:760px){html{scroll-padding-top:78px}.topbar{height:60px;padding:0 20px;gap:15px}.brand{font-size:10px;letter-spacing:1px}.edition{display:none}.source{margin-left:auto;border:0;padding:0;font-size:11px}.layout{display:flex;flex-direction:column;gap:0;padding:0 20px}.sidebar{border:0;padding:0;order:0}.sidebar-inner{position:static;max-height:none;overflow:visible;padding:20px 0 0}.sidebar .small-label,.sidebar .contents-label,.sidebar .sidebar-bottom,.search-box kbd{display:none}.search-box{margin:0;padding:11px 13px}.search-status{margin:8px 0 0}.toc{flex-direction:row;overflow-x:auto;gap:7px;padding:10px 0 14px}.toc a{flex-shrink:0;font-size:11px;padding:7px 10px;border:1px solid var(--line);background:var(--paper)}.toc a>span{font-size:10px}main{order:1;max-width:100%}.hero{padding:23px 0 26px}h1{font-size:43px;letter-spacing:-1.5px;margin:20px 0}.hero-description{font-size:13px}.desktop-break{display:none}.eyebrow{font-size:10px}.roles{gap:6px;margin-top:20px}.roles>span{padding:7px 9px;font-size:10px}.hero-meta{margin-top:24px;gap:12px;font-size:10px}.hero-meta span+span{padding-left:12px}.reading-toolbar{font-size:10px;padding:13px 0}.reading-toolbar button{font-size:10px;padding-left:10px}.chapter{margin:10px 0 32px;scroll-margin-top:75px}.chapter-heading{gap:9px;margin-bottom:12px}.chapter-heading h2{font-size:17px}.chapter-number{font-size:11px}.copy-link{width:25px;height:25px}.question{padding:17px}.answer{padding:0 17px}.answer summary{padding:16px 0}.prose{font-size:14px;line-height:1.9}.prose pre{padding:15px;font-size:11px}.prose blockquote{padding:10px 13px}.prose p{margin-bottom:16px}footer{padding-bottom:30px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}@media print{body{background:white;color:black}.topbar,.sidebar,.reading-toolbar,.copy-link,.reading-progress,.toggle-hint,.skip-link,#toast{display:none!important}.layout{display:block;padding:0;max-width:none}main{max-width:none}.hero{padding:0 0 22px}h1{font-size:32px}.hero-description{font-size:12px}.chapter{margin:20px 0}.chapter-heading{break-after:avoid}.question,.answer{background:white;border:1px solid #ccc;border-radius:0}.question{break-inside:avoid}.prose{font-size:11px}.prose pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f1f1f1;color:black;break-inside:avoid}.prose a{color:inherit}.chapter[hidden]{display:block!important}footer{font-size:9px}footer>a{display:none}}
+</style>
+</head>
+<body>
+  <div class="reading-progress" aria-hidden="true"></div>
+  <a class="skip-link" href="#main">跳到对话正文</a>
+  <header class="topbar"><a class="brand" href="#top"><span class="brand-icon">三</span> CLASSROOM NOTES</a><span class="edition">设计讨论 · 2026-09-30</span><a class="source" href="https://github.com/RosannaBebe/ai-classroom-dialogue" target="_blank" rel="noopener noreferrer">GitHub ↗</a></header>
+  <div class="layout" id="top">
+    <aside class="sidebar" aria-label="阅读工具和话题目录">
+      <div class="sidebar-inner">
+        <div class="small-label">在讨论中查找</div>
+        <label class="search-box"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="搜索关键词…" aria-label="搜索对话关键词"><kbd>/</kbd></label>
+        <p class="search-status" id="search-status" role="status">11 个话题 · 21 条消息</p>
+        <div class="small-label contents-label">讨论目录</div>
+        <nav class="toc"><a href="#topic-01" data-topic="topic-01"><span>01</span>从 AI 课堂的想法出发</a><a href="#topic-02" data-topic="topic-02"><span>02</span>让学生成为第三个 Agent</a><a href="#topic-03" data-topic="topic-03"><span>03</span>覆盖 3–15 岁与多地区学生</a><a href="#topic-04" data-topic="topic-04"><span>04</span>Persona 的定义、常量与变量</a><a href="#topic-05" data-topic="topic-05"><span>05</span>能力和记忆如何存储</a><a href="#topic-06" data-topic="topic-06"><span>06</span>课堂中何时读取与更新状态</a><a href="#topic-07" data-topic="topic-07"><span>07</span>独立完成与帮助下完成</a><a href="#topic-08" data-topic="topic-08"><span>08</span>如何与合作伙伴分享对话</a><a href="#topic-09" data-topic="topic-09"><span>09</span>状态变更如何追溯</a><a href="#topic-10" data-topic="topic-10"><span>10</span>学习规则与年龄、地区、学科</a><a href="#topic-11" data-topic="topic-11"><span>11</span>生成 HTML 并发布到 GitHub</a></nav>
+        <div class="sidebar-bottom"><a href="conversation.md" download>↓ 下载对话原文</a><button id="print">打印 / 保存 PDF</button></div>
+      </div>
+    </aside>
+    <main id="main">
+      <section class="hero" aria-labelledby="page-title">
+        <div class="eyebrow"><span></span> 从想法到实现 · 对话记录</div>
+        <h1 id="page-title">一间课堂，<br>三个 <em>Agent。</em></h1>
+        <p class="hero-description">关于 AI 老师、AI 助教与 AI 学生的设计讨论。<br class="desktop-break">从学生 Persona 出发，一步步走向可追溯的学习模拟。</p>
+        <div class="roles"><span><i class="role-dot teacher"></i>老师 · 引导教学</span><span><i class="role-dot assistant"></i>助教 · 提供支持</span><span><i class="role-dot student"></i>学生 · 模拟学习</span></div>
+        <div class="hero-meta"><span>11 个话题</span><span>21 条原始消息</span><span>2026-09-30 快照</span></div>
+      </section>
+      <div class="reading-toolbar"><span>按对话发生顺序完整保留</span><div><button id="expand">展开回答</button><button id="collapse">收起回答</button></div></div>
+      <p id="empty" hidden>没有找到相关话题。试试“记忆”“学习规则”或“独立完成”。</p>
+      <div id="chapters"><article class="chapter" id="topic-01">
+  <div class="chapter-heading"><span class="chapter-number">01</span><h2>从 AI 课堂的想法出发</h2><button class="copy-link" data-id="topic-01" aria-label="复制话题链接：从 AI 课堂的想法出发" title="复制此话题链接">↗</button></div>
+  <div class="question"><div class="speaker">用户 · 提问</div><div class="prose"><p>我想自己搭建一个Ai老师和AI助教的两个Agent共存的课堂，你能配合我一步一步的搭建起来么？</p>
+</div></div><details class="answer" open><summary><span class="speaker">AI · 回答</span><span class="toggle-hint">展开 / 收起</span></summary><div class="prose"><p>可以。我们一步一步搭，每一步都做出能运行、能体验的东西，再根据你的反馈往下走。</p>
+<p>先做一个最小课堂，让三个角色能完成一次教学互动：</p>
+<ul>
+<li><strong>AI 老师</strong>：讲解、提问，根据学生回答推进教学。</li>
+<li><strong>AI 助教</strong>：在学生卡住时提供提示，帮助老师了解学生的困难。</li>
+<li><strong>学生</strong>：回答问题，也可以主动向助教求助。</li>
+</ul>
+<p>关键是设计清楚：<strong>谁在什么时候说话、两个 Agent 怎么共享课堂信息，以及如何避免抢话或重复解释。</strong> 我会配合你把教学流程、角色分工、技术实现和实际测试逐步做起来。</p>
+<p>我们先确定第一件事：<strong>你想给什么样的学生、上一堂什么内容的课？</strong> 比如“给 5–8 岁孩子上的英语口语课”，或者你已经有的一节具体课程。</p>
+</div></details>
+  
+</article><article class="chapter" id="topic-02">
+  <div class="chapter-heading"><span class="chapter-number">02</span><h2>让学生成为第三个 Agent</h2><button class="copy-link" data-id="topic-02" aria-label="复制话题链接：让学生成为第三个 Agent" title="复制此话题链接">↗</button></div>
+  <div class="question"><div class="speaker">用户 · 提问</div><div class="prose"><p>哦，学生设计成第三个Agent吧</p>
+</div></div><details class="answer" open><summary><span class="speaker">AI · 回答</span><span class="toggle-hint">展开 / 收起</span></summary><div class="prose"><p>好，那我们做一个 <strong>AI 老师＋AI 助教＋AI 学生</strong> 的三 Agent 模拟课堂。你作为观察者，可以随时暂停、调整角色设定，再重新运行。</p>
+<p>三个角色先这样分工：</p>
+<ul>
+<li><strong>老师 Agent</strong>：围绕教学目标讲解、提问，并判断是否继续。</li>
+<li><strong>助教 Agent</strong>：观察学生表现，在需要时提示或辅助，避免抢老师的话。</li>
+<li><strong>学生 Agent</strong>：按照设定的年龄、知识水平和性格回答，可以答错、听不懂或走神。</li>
+</ul>
+<p>学生需要有独立的信息边界，只看到课堂上已经发生的内容，避免提前看到老师的答案，影响模拟效果。</p>
+<p>第一步先确定场景：<strong>你希望这位 AI 学生模拟哪个年龄段、什么水平，学习什么内容？</strong></p>
+</div></details>
+  
+</article><article class="chapter" id="topic-03">
+  <div class="chapter-heading"><span class="chapter-number">03</span><h2>覆盖 3–15 岁与多地区学生</h2><button class="copy-link" data-id="topic-03" aria-label="复制话题链接：覆盖 3–15 岁与多地区学生" title="复制此话题链接">↗</button></div>
+  <div class="question"><div class="speaker">用户 · 提问</div><div class="prose"><p>我需要3-15岁，每一个年龄都能有一些学生的persona，来模仿各个年龄各个风格的学生
+我的学生分布在东南亚、沙特、韩国、日本
+他们不一定只学习英语，可能也会学习其他校内学科</p>
+</div></div><details class="answer" open><summary><span class="speaker">AI · 回答</span><span class="toggle-hint">展开 / 收起</span></summary><div class="prose"><p>明白。学生 Agent 要做成一个<strong>可切换 persona 的学生库</strong>，覆盖 3–15 岁、多个地区和学科，而不是固定扮演某一个学生。</p>
+<p>我们可以先按<strong>每个年龄 3 个不同的学生，共 39 个基础 persona</strong>起步，再加入地区、语言和学科背景。每个 persona 分成四层：</p>
+<ul>
+<li><strong>年龄与学习背景</strong>：年龄、年级、上学经历、已有知识。年龄相同，能力也可以不同。</li>
+<li><strong>地区与语言</strong>：所在国家、家庭语言、教学语言，以及用教学语言表达的熟练程度。地区用于补充语言和课程背景，不用来预设性格。</li>
+<li><strong>个人学习风格</strong>：主动或慢热、谨慎或急于作答、是否愿意求助、遇到挫折的反应。这些特征可以组合，不把孩子固定成“好学生／差学生”。</li>
+<li><strong>各学科能力</strong>：英语、数学、科学等分别设定。例如，数学理解很好，但用英语解释解题过程比较困难。</li>
+</ul>
+<p>此外，还要把<strong>稳定的 persona</strong>和<strong>当堂状态</strong>分开。同一个学生今天可能很投入，下一次可能疲倦；课堂中的成功、困惑和老师的反馈，也应该影响后续表现。</p>
+<p>例如，一个虚构学生可以是：</p>
+<blockquote>
+<p>8 岁，生活在日本，家庭语言是日语。数学计算较熟练，英语表达较弱。愿意尝试，但怕当众答错；听不懂英文数学题时，可能先猜答案。得到具体提示后会继续尝试，不会因为老师说一句“再想想”就突然掌握知识。</p>
+</blockquote>
+<p>后续模拟时，学生只能依据自己的知识和已发生的课堂内容回答；我们还会检查它是否出现了超出设定水平、过度配合老师的情况。</p>
+<p>先补齐一个会影响语言和课程配置的信息：<strong>东南亚具体覆盖哪些国家？</strong></p>
+</div></details>
+  
+</article><article class="chapter" id="topic-04">
+  <div class="chapter-heading"><span class="chapter-number">04</span><h2>Persona 的定义、常量与变量</h2><button class="copy-link" data-id="topic-04" aria-label="复制话题链接：Persona 的定义、常量与变量" title="复制此话题链接">↗</button></div>
+  <div class="question"><div class="speaker">用户 · 提问</div><div class="prose"><p>在回答你东南亚具体覆盖的国家之前，我想先跟你讨论下，你怎么定义什么是persona，如何写清楚或者定义清楚一个Agent的persona，哪些应该是这个persona的常量哪些是变量。以及构建一个学生Agent，除了有persona以外，还需要什么</p>
+</div></div><details class="answer" open><summary><span class="speaker">AI · 回答</span><span class="toggle-hint">展开 / 收起</span></summary><div class="prose"><p>我建议先把一个边界定清楚：<strong>persona 描述“这个学生通常是怎样的人”；完整的学生 Agent 还要描述“他现在会什么、经历过什么，以及此刻如何反应”。</strong></p>
+<p>我前面提出“每个年龄先做 3 个 persona”，只是一个起步数量，并没有解决该如何定义和验证它们。现在先把结构讨论清楚更合适。</p>
+<p><strong>先说什么是 persona。</strong></p>
+<p>在我们的项目里，我建议用这个工作定义：</p>
+<blockquote>
+<p>Persona 是一组相对稳定、能影响行为的个人背景、动机、偏好和反应倾向，让同一个学生在不同课堂情境中保持可辨认的一致性。</p>
+</blockquote>
+<p>其中，“相对稳定”和“影响行为”最重要。</p>
+<p>“8 岁，生活在日本，喜欢恐龙”提供了背景，但不足以决定课堂行为。还需要知道：他为什么愿意参与？不确定时会猜、沉默还是求助？老师纠正他以后，他通常如何回应？</p>
+<p>同时，persona 应该表达<strong>倾向，而非每次必然执行的动作</strong>。一个慢热的学生，遇到熟悉的话题也可以主动说话；喜欢恐龙，也不代表每句话都要提恐龙。</p>
+<p><strong>怎样把 persona 写清楚？把形容词写成有条件的行为。</strong></p>
+<p>例如，只写“内向、容易受挫、需要鼓励”，不同模型可能演出完全不同的学生。我会把它展开成：</p>
+<blockquote>
+<p>面对陌生老师和开放式问题，通常先等待，回答较短。<br>面对熟悉知识的选择题，即使没有被点名，也可能主动回答。<br>连续尝试失败后，更倾向于说“不知道”或减少参与。<br>老师指出已经做对的部分，并提供一个可执行的小提示后，更愿意重试。<br>鼓励可以提高尝试意愿，但不会直接补齐缺失的知识。</p>
+</blockquote>
+<p>这段定义交代了<strong>触发情境、行为倾向、变化条件和能力边界</strong>，后续就能用课堂片段检验。</p>
+<p>每个关键特征都应该能回答：</p>
+<ul>
+<li>什么情况下会表现出来？</li>
+<li>会表现成什么可观察的行为？</li>
+<li>什么情况下会减弱，或者出现例外？</li>
+<li>我们拿什么例子判断它有没有演对？</li>
+</ul>
+<p>没有数据依据时，我不建议一开始写“内向程度 0.8”“答错后有 70% 概率沉默”。这些数字需要明确含义和校准，否则只是看起来精确。</p>
+<p><strong>常量和变量，要根据变化的时间尺度区分。</strong></p>
+<p>我建议分成四类，而不是只分“固定／不固定”。</p>
+<ol>
+<li><p><strong>一次模拟中固定的背景</strong><br>年龄、家庭语言、所在地区、既往教育经历等。它们不能因为几轮聊天突然改变。跨学期模拟时，年龄、年级等可以按时间推进。</p>
+</li>
+<li><p><strong>缓慢变化的个人倾向</strong><br>主动表达的倾向、面对不确定性的习惯、兴趣、通常如何求助等。这些构成 persona 的核心。短期内保持稳定，长期变化需要有持续经历作为依据。</p>
+</li>
+<li><p><strong>随学习经历更新的能力和记忆</strong><br>掌握的知识点、常见误解、教学语言熟练度、对某类题目的信心，以及与老师、助教的互动经历。建议单独保存，避免把“不会分数”永久写进性格设定。</p>
+</li>
+<li><p><strong>随课堂事件变化的即时状态</strong><br>当前注意力、困惑、疲劳、挫败感、参与意愿，以及“这道题有没有听懂”。它们可以在几轮互动中变化，但需要有原因。</p>
+</li>
+</ol>
+<p>例如，“通常敢于尝试”属于个人倾向；“刚连续答错，现在不想开口”属于即时状态，两者可以同时成立。</p>
+<p>还有一个容易遗漏的区别：<strong>创建学生时可配置，不等于运行中可以随意变化。</strong> 我们可以在创建时选择年龄，但不能让模型在课堂里自行修改年龄。</p>
+<p><strong>除了 persona，学生 Agent 还需要下面几部分。</strong></p>
+<p><strong>① 明确的知识与能力模型。</strong><br>要具体到当前课程涉及的知识点：会什么、不会什么、哪里有误解、需要什么帮助。多学科场景尤其要把“学科理解”和“教学语言理解”分开。</p>
+<p>例如，学生可能会用母语解决一道数学题，却听不懂英文题干。此时给数学提示和翻译题干，应该产生不同效果。</p>
+<p>学生模拟研究也指出，大模型本身能力很强，仅靠角色提示扮演初学者，容易产生不合理的错误和学习过程；需要明确限制模拟学生可用的知识，并定义知识如何更新。<a href="https://arxiv.org/abs/2601.05473" target="_blank" rel="noopener noreferrer">相关研究</a></p>
+<p><strong>② 独立的信息边界。</strong><br>学生只能根据自己实际接收到的课堂信息行动。老师的教案、标准答案、助教的内部判断，不能直接混入学生上下文。</p>
+<p>在三 Agent 课堂里，还要明确：助教是在对学生说话，还是在给老师发内部消息？学生是否听到了这句提示？这些都会改变下一步反应。</p>
+<p><strong>③ 记忆。</strong><br>学生需要记得刚才尝试了什么、接受过什么提示，以及之前与老师和助教发生过什么。</p>
+<p>不过，“刚听过一个答案”和“已经掌握这个知识”要分别记录。记住原题答案，不代表换一道题也会。</p>
+<p><strong>④ 行为选择机制。</strong><br>每轮先决定学生要采取什么行动，再生成具体表达。可选行动可以包括回答、猜测、追问、求助、沉默、请求重复、转移话题等。</p>
+<p>这样才能模拟“他选择不回答”，而不是系统每收到一条消息，就强迫学生说出一句完整的话。语音课堂还需要考虑等待、打断，以及非语言操作。</p>
+<p><strong>⑤ 学习和状态更新规则。</strong><br>老师讲解、助教提示之后，什么发生了变化，必须有明确规则。</p>
+<p>例如：</p>
+<ul>
+<li>泛泛的鼓励，可以提高参与意愿。</li>
+<li>提供一个步骤，可以帮助完成当前题目。</li>
+<li>独立解决一道变式题，可以作为掌握程度提高的证据。</li>
+</ul>
+<p>这些先作为我们的建模假设，之后再用真实课堂记录校准。不能让学生只因为老师说“你明白了吗”，就自动进入“已经学会”的状态。</p>
+<p><strong>⑥ 课堂调度和验证机制。</strong><br>课堂调度负责决定谁可以发言、谁接收消息、沉默后等待多久。这属于课堂系统，不需要再设一个有 persona 的角色。</p>
+<p>验证则检查两件不同的事：<strong>行为是否符合这个学生，以及他对教学的反应是否合理。</strong> 近期学生模拟研究也将行为匹配和接受指导后的变化分别评估。<a href="https://arxiv.org/abs/2609.01591" target="_blank" rel="noopener noreferrer">StudentSim 研究</a></p>
+<p>我们还需要保存初始状态和运行记录，才能让同一个学生从相同起点体验不同教学方案。否则，老师方案变了，学生状态也变了，很难判断差异来自哪里。</p>
+<p>用一个完整例子串起来：</p>
+<blockquote>
+<p>同一个学生，通常谨慎，怕在陌生老师面前答错。<br>他会做两位数加法，但没有理解进位；当前精神状态不错。<br>老师第一次问进位题，他尝试用已有方法回答，出现与误解一致的错误。<br>老师只说“加油”，他可能愿意再试，但仍然不会进位。<br>助教用实物分组演示，他在帮助下完成这一题。<br>系统记录“在提示下完成”，再通过新题观察能否独立应用。</p>
+</blockquote>
+<p>这里，<strong>persona 决定他如何面对困难，知识模型决定困难在哪里，课堂经历决定他接下来可能发生什么变化。</strong></p>
+<p>所以我建议下一步先做<strong>一个学生的完整定义，以及几段用于检验他的课堂情境</strong>。先确认我们能稳定模拟一个“有边界、会变化”的学生，再扩展到 3–15 岁和不同地区。</p>
+</div></details>
+  
+</article><article class="chapter" id="topic-05">
+  <div class="chapter-heading"><span class="chapter-number">05</span><h2>能力和记忆如何存储</h2><button class="copy-link" data-id="topic-05" aria-label="复制话题链接：能力和记忆如何存储" title="复制此话题链接">↗</button></div>
+  <div class="question"><div class="speaker">用户 · 提问</div><div class="prose"><p>你提到单独保存随学习经历更新的能力和记忆，这个具体研发侧如何操作？</p>
+</div></div><details class="answer" open><summary><span class="speaker">AI · 回答</span><span class="toggle-hint">展开 / 收起</span></summary><div class="prose"><p>具体研发上，我建议：<strong>把学生的能力、记忆保存到我们自己的数据库里，由程序负责读取和更新；大模型负责根据这些信息生成学生行为。</strong></p>
+<p>这里的“学习”首先体现为数据库中的学生状态发生变化，<strong>不涉及每上完一节课就训练或修改大模型参数</strong>。第一版可以用这种方式实现。</p>
+<p>我用“学生学会数学进位”这个例子展开。</p>
+<p><strong>1. 把 persona、能力、记忆分别存储，用同一个学生 ID 关联。</strong></p>
+<p>研发可以先建立以下几类数据，初期放在同一个数据库即可，不需要拆成多个服务。</p>
+<ul>
+<li><code>student_profiles</code>：学生背景和相对稳定的 persona。</li>
+<li><code>student_skill_states</code>：按知识点保存的能力状态。</li>
+<li><code>student_memories</code>：课堂中发生过的、值得后续使用的经历。</li>
+<li><code>classroom_events</code>：完整的课堂事件记录，便于回放和核查。</li>
+</ul>
+<p>能力状态不能只写“数学水平：中等”，而要具体到当前教学涉及的知识点。例如：</p>
+<pre><code class="language-json">{
+  &quot;student_id&quot;: &quot;student_008&quot;,
+  &quot;simulation_id&quot;: &quot;run_001&quot;,
+  &quot;skill_id&quot;: &quot;math.addition.carry&quot;,
+  &quot;status&quot;: &quot;with_support&quot;,
+  &quot;misconceptions&quot;: [&quot;把个位相加的两位数直接写进个位&quot;],
+  &quot;evidence&quot;: {
+    &quot;independent_successes&quot;: 0,
+    &quot;supported_successes&quot;: 1
+  },
+  &quot;last_evidence_event_id&quot;: &quot;event_023&quot;,
+  &quot;version&quot;: 4
+}
+</code></pre>
+<p>这里的 <code>with_support</code> 表示“在帮助下能完成”。第一版可以先采用“未接触、正在学习、提示下完成、独立完成”等可解释状态，不急着使用看似精确的掌握概率。</p>
+<p>记忆则记录经历：</p>
+<pre><code class="language-json">{
+  &quot;student_id&quot;: &quot;student_008&quot;,
+  &quot;simulation_id&quot;: &quot;run_001&quot;,
+  &quot;type&quot;: &quot;learning_episode&quot;,
+  &quot;summary&quot;: &quot;助教用十根小棒换一捆的演示，帮助我完成了进位题。&quot;,
+  &quot;related_skill_ids&quot;: [&quot;math.addition.carry&quot;],
+  &quot;source_event_ids&quot;: [&quot;event_021&quot;, &quot;event_023&quot;]
+}
+</code></pre>
+<p><strong>这两条数据表达不同的东西：能力说明“现在能做到什么”，记忆说明“之前经历过什么”。</strong> 学生可以记得一次演示，但还不能独立完成新题。</p>
+<p><strong>2. 每次轮到学生行动，程序组装这一次所需的上下文。</strong></p>
+<p>不需要把学生全部历史塞给大模型。课堂程序按当前任务读取：</p>
+<ol>
+<li>学生的 persona。</li>
+<li>当前题目涉及的能力与误解。</li>
+<li>当前注意力、困惑等即时状态。</li>
+<li>与当前任务有关的少量记忆。</li>
+<li>学生有权限看到的课堂消息。</li>
+</ol>
+<p>例如，当前教进位，就读取加法、数位、进位相关状态，不必加载全部英语学习记录。</p>
+<p>然后调用学生模型，让它返回结构化的行动：</p>
+<pre><code class="language-json">{
+  &quot;action&quot;: &quot;answer&quot;,
+  &quot;utterance&quot;: &quot;是三十二吗？&quot;,
+  &quot;help_requested&quot;: false
+}
+</code></pre>
+<p><strong>学生模型生成“怎么表现”，不直接修改自己的能力数据库。</strong> 它说“我懂了”，只能算一次课堂表达，不能自动当作掌握证据。</p>
+<p><strong>3. 能力更新由独立的更新逻辑控制。</strong></p>
+<p>这里的“独立”可以只是后端的一段函数，不需要额外增加一个有角色设定的 Agent。</p>
+<p>第一版我建议用“固定规则＋必要时调用模型判断”的方式：</p>
+<ul>
+<li>程序能直接判定的，使用规则，例如答案是否正确、之前是否给过提示。</li>
+<li>开放式回答需要理解时，调用模型进行结构化评估。</li>
+<li>评估结果交给程序校验，再决定是否更新数据库。</li>
+</ul>
+<p>例如，一次回答结束后产生这样的证据：</p>
+<pre><code class="language-json">{
+  &quot;event_id&quot;: &quot;event_023&quot;,
+  &quot;skill_id&quot;: &quot;math.addition.carry&quot;,
+  &quot;answer_correct&quot;: true,
+  &quot;support_level&quot;: &quot;step_by_step&quot;,
+  &quot;task_type&quot;: &quot;original_question&quot;
+}
+</code></pre>
+<p>更新程序据此判断：这是在逐步帮助下完成原题，可以增加“提示下成功”的记录；不足以直接改成“独立掌握”。</p>
+<p>每次修改还应保留：<strong>修改前是什么、修改后是什么、依据哪条课堂事件、用了哪个版本的更新规则。</strong> 出现“学生突然变聪明”的问题时，研发可以追溯。</p>
+<p><strong>4. 模拟学生还有一个特殊问题：教学怎样让他获得新能力？</strong></p>
+<p>这里需要区分两个环节：</p>
+<ul>
+<li><strong>模拟学习发生</strong>：学生收到讲解或提示后，按我们设定的学习规则，更新其模拟知识状态。</li>
+<li><strong>观察学习表现</strong>：后续通过独立作答、变式题等，观察其表现是否支持更高的掌握判断。</li>
+</ul>
+<p>例如，第一版可以设定：</p>
+<blockquote>
+<p>接收到相关演示，并参与完成一个步骤后，将该知识点从“正在学习”更新为“提示下完成”；后续满足预设的独立作答条件，再更新为“独立完成”。</p>
+</blockquote>
+<p>这是一条<strong>模拟规则，需要校准</strong>。不能把它当成真实儿童必然遵循的学习规律，也不能因为规则规定学生会进步，就反过来认定老师教得有效。</p>
+<p>研发上最好同时保留“模拟器内部能力状态”和“老师根据表现估计的能力”。老师只能看到课堂行为和允许共享的评估结果，不能直接读取学生内部设定，否则测试会失真。</p>
+<p><strong>5. 把这些步骤串成一次完整的运行。</strong></p>
+<p>每轮课堂的执行顺序可以是：</p>
+<pre><code class="language-text">老师／助教发出消息
+        ↓
+程序判断学生是否能接收到，并记录事件
+        ↓
+按规则处理提示、讲解对学生状态的影响
+        ↓
+读取 persona、相关能力、记忆和当前状态
+        ↓
+调用学生模型生成行动
+        ↓
+记录行动，评估本次表现
+        ↓
+更新能力、即时状态和相关记忆
+        ↓
+进入下一轮
+</code></pre>
+<p>能力更新和记忆写入需要关联同一事件，重复处理时不能重复累计；更新时检查状态版本，防止老师和助教的并发消息互相覆盖学生状态。</p>
+<p>另外，<strong>给模型提供能力设定，并不能完全保证它不使用自身已有知识</strong>。我们还要检测超出设定的回答，记录违规，必要时重新生成或判定这次模拟无效。</p>
+<p><strong>6. 同一个学生要支持“继续学习”和“从原点重跑”。</strong></p>
+<p>这是数据库设计里很重要的一点。</p>
+<p>假设我们想比较两种老师讲法，就应该从同一份初始快照分别启动：</p>
+<ul>
+<li>模拟 A：学生初始状态 → 老师方案 A → A 的能力与记忆。</li>
+<li>模拟 B：同一初始状态 → 老师方案 B → B 的能力与记忆。</li>
+</ul>
+<p>A 学到的东西不能自动带进 B。因此上面的数据都有 <code>simulation_id</code>。只有选择“继续这个学生的下一节课”时，才继承上次运行结束后的状态。</p>
+<p>第一版的研发交付可以很具体：<strong>一个数据库、一个学生生成接口、一套受控的状态更新规则，以及一个能查看“每轮前后发生了什么变化”的调试页面。</strong> 先把这条链跑通，就能验证学生是否真的表现出连续的学习经历，再逐步增加 persona 数量。</p>
+</div></details>
+  
+</article><article class="chapter" id="topic-06">
+  <div class="chapter-heading"><span class="chapter-number">06</span><h2>课堂中何时读取与更新状态</h2><button class="copy-link" data-id="topic-06" aria-label="复制话题链接：课堂中何时读取与更新状态" title="复制此话题链接">↗</button></div>
+  <div class="question"><div class="speaker">用户 · 提问</div><div class="prose"><p>把学生的能力、记忆保存到我们自己的数据库里，由程序负责读取和更新；大模型负责根据这些信息生成学生行为。
+这里，应该在什么时候读取和更新？是需要在学生student首次启动的时候读取，然后整个课堂中都使用这个能力与记忆，还是说课程进行中，还需要分阶段更新数据库，并更新给学生Agent？</p>
+</div></div><details class="answer" open><summary><span class="speaker">AI · 回答</span><span class="toggle-hint">展开 / 收起</span></summary><div class="prose"><p><strong>课程进行中需要持续更新，并把相关变化提供给学生 Agent 的下一次调用。</strong> 只在启动时读取一次，会让学生一直按照“上课前的自己”行动。</p>
+<p>不过，<strong>每次调用都使用最新状态，不等于每次都重新查询全部数据库。</strong> 研发上可以把“读取数据库”“更新运行状态”“保存数据库”分开处理。</p>
+<p>我建议第一版采用：<strong>开课时加载，每次学生行动前准备最新上下文，每个有效互动结束后保存变化。</strong></p>
+<p><strong>开课时：加载这个学生的起点。</strong></p>
+<p>从数据库读取：</p>
+<ul>
+<li>persona；</li>
+<li>本节课相关的知识能力；</li>
+<li>与本节课有关的历史记忆；</li>
+<li>上次结束时需要继承的状态。</li>
+</ul>
+<p>程序把它们放进这堂课的“运行状态”里，也就是后端内存中的一个学生状态对象。后面课堂中的更新先作用于这个对象。</p>
+<p>这样，不必每说一句话，都从数据库重新加载整个学生。</p>
+<p><strong>课堂中：在有意义的事件后更新，而不是固定每隔几分钟更新。</strong></p>
+<p>不同事件需要更新的内容不同：</p>
+<ul>
+<li><strong>老师提出问题</strong>：可能改变困惑程度、当前任务，不代表知识增加。</li>
+<li><strong>助教给出提示</strong>：记录学生已经获得什么帮助，必要时更新当前理解或可完成的步骤。</li>
+<li><strong>学生完成回答</strong>：记录作答结果、是否依赖提示，并按规则更新能力证据。</li>
+<li><strong>进入新知识点</strong>：加载新知识点相关能力和历史记忆。</li>
+<li><strong>一段教学结束</strong>：整理这一段值得保留的记忆，保存阶段快照。</li>
+</ul>
+<p>不是每个事件都修改能力。例如，“老师说了句你好”需要记录对话，但通常不需要改变数学能力。</p>
+<p><strong>每次轮到学生行动前：使用最新状态构建输入。</strong></p>
+<p>这是最关键的一步。可以把它理解成：每次学生要说话或做动作，程序都重新准备一份“此刻的学生资料”。</p>
+<p>这份资料包括稳定的 persona、最新的相关能力、当前状态、已收到的提示和近期对话。即使 persona 没变，能力或状态变了，下一次调用也必须体现变化。</p>
+<p>对于常见的大模型 API，<strong>数据库中的修改不会自动被模型知道</strong>。必须由我们的程序把最新数据放进下一次请求。即使沿用同一段对话，也要明确提供当前状态，避免旧设定继续生效。</p>
+<p>拿一段进位教学举例：</p>
+<ol>
+<li><strong>开课</strong>：加载“会不进位加法，尚不会进位”。</li>
+<li><strong>老师提问</strong>：学生按当前能力尝试，答错；程序记录错误，更新困惑状态。</li>
+<li><strong>助教演示</strong>：程序记录演示已被学生接收，按模拟规则更新为“可以尝试跟着步骤做”。</li>
+<li><strong>学生再次回答前</strong>：把这个最新状态和演示内容一起交给模型，学生现在可以利用帮助。</li>
+<li><strong>学生在帮助下答对</strong>：保存“提示下完成”的证据，仍不直接认定独立掌握。</li>
+<li><strong>老师出一道新题</strong>：下一次调用使用更新后的能力，但不自动附带上一题的逐步提示，观察学生如何迁移。</li>
+</ol>
+<p>如果只在开课时加载且后面不更新，第 4 步可能仍然表现得完全没学过；如果任由对话历史决定一切，又可能听完演示就突然变成全会。</p>
+<p><strong>写数据库：第一版按每个有效互动保存，课末再做整理。</strong></p>
+<p>我建议：</p>
+<ul>
+<li>每条课堂事件发生后，及时保存事件记录。</li>
+<li>能力、状态确实变化后，保存增量变化及其依据。</li>
+<li>一个教学环节结束时，整理长期记忆。</li>
+<li>课程结束时，保存最终状态和下次可继承的记忆。</li>
+</ul>
+<p>没有必要每轮都生成一份长期记忆；原始事件先保留，重要经历再整理。例如，“老师刚说了一句鼓励”可以先在近期对话里，“多次具体提示后重新愿意尝试”才可能值得形成一条长期记忆。</p>
+<p>还有一条研发约束：<strong>同一个学生的状态更新应按事件顺序处理；一次模型调用使用一份固定版本的状态。</strong> 如果学生生成回答时助教又发来新提示，要明确让它进入下一轮，或者取消当前生成后重试，不能让一次回答对应两个不同版本的学生。</p>
+<p>所以，你提出的两个方案中，我们应采用**“启动时加载＋课中按事件更新＋下次行动前提供最新状态”**。阶段节点适合整理记忆和保存快照，影响当前行为的变化则应及时生效，不必等到一个阶段结束。</p>
+</div></details>
+  
+</article><article class="chapter" id="topic-07">
+  <div class="chapter-heading"><span class="chapter-number">07</span><h2>独立完成与帮助下完成</h2><button class="copy-link" data-id="topic-07" aria-label="复制话题链接：独立完成与帮助下完成" title="复制此话题链接">↗</button></div>
+  <div class="question"><div class="speaker">用户 · 提问</div><div class="prose"><p>那又是基于什么来判定，学生是在帮助下完成的，还是独立完成的呢？来得到这两个参数的值？</p>
+<pre><code class="language-json">&quot;independent_successes&quot;: 0,
+    &quot;supported_successes&quot;: 1
+</code></pre>
+</div></div><details class="answer" open><summary><span class="speaker">AI · 回答</span><span class="toggle-hint">展开 / 收起</span></summary><div class="prose"><p>这两个值应该由<strong>程序根据作答结果和帮助记录累计</strong>，不能让学生 Agent 自己报告“我是独立完成的”。</p>
+<p>而且我前面的例子省略了一层：要先给每次任务生成一条判定记录，才能可靠地得到这两个计数。</p>
+<p><strong>第一步，先定义这次任务允许学生使用什么。</strong></p>
+<p>“独立完成”需要有明确条件。例如，本次任务规定：</p>
+<blockquote>
+<p>学生可以看题目和配图，可以使用之前学过的知识；作答过程中没有收到针对本题的额外提示。</p>
+</blockquote>
+<p>按照这个定义，之前上课学过解题方法，不影响独立完成。独立不是“从来没有被教过”，而是<strong>完成当前任务时，没有依赖超出既定条件的帮助</strong>。</p>
+<p>对于你的多语言课堂，这个定义尤其重要：如果我们测数学，翻译题干可以被预先规定为允许的条件；如果测英文阅读理解，翻译题干就属于帮助。因此，判定要跟着教学目标走。</p>
+<p><strong>第二步，记录作答前，学生实际接收过哪些帮助。</strong></p>
+<p>老师和助教的课堂事件，都关联到具体任务，例如：</p>
+<pre><code class="language-json">{
+  &quot;event_id&quot;: &quot;event_022&quot;,
+  &quot;task_id&quot;: &quot;task_007&quot;,
+  &quot;recipient&quot;: &quot;student_008&quot;,
+  &quot;type&quot;: &quot;hint&quot;,
+  &quot;support_level&quot;: &quot;step&quot;,
+  &quot;content&quot;: &quot;先算个位，看看有没有满十。&quot;,
+  &quot;delivered_before_answer&quot;: true
+}
+</code></pre>
+<p>这里可以先设计几种帮助类型：</p>
+<ul>
+<li><strong>鼓励或流程提醒</strong>：“可以再试试。”通常不提供解题信息。</li>
+<li><strong>方向提示</strong>：“注意个位有没有满十。”</li>
+<li><strong>步骤帮助</strong>：“8 加 7 是 15，把 5 写在个位。”</li>
+<li><strong>答案提供</strong>：“答案是 35，跟我说一遍。”</li>
+</ul>
+<p>关键依据是<strong>帮助内容、提供时间、接收者、对应任务</strong>。助教给老师的内部建议，学生没有收到，就不能算学生获得帮助。</p>
+<p>这些标签可以由课堂程序预先标注；自由生成的提示，则需要检查实际内容，避免把已经透露答案的话误标成“鼓励”。</p>
+<p><strong>第三步，将“答案是否正确”和“是否得到帮助”分开判定。</strong></p>
+<p>正确性由题目的评分规则决定：</p>
+<ul>
+<li>数值题、选择题，可以用程序判分。</li>
+<li>开放式回答，按明确的评分标准评估；必要时调用独立的评估模型。</li>
+<li>证据不足时标为待定，不强行累计成功。</li>
+</ul>
+<p>帮助情况来自事件记录。两者合并后，才能得到本次结果：</p>
+<pre><code class="language-json">{
+  &quot;task_id&quot;: &quot;task_007&quot;,
+  &quot;answer_event_id&quot;: &quot;event_023&quot;,
+  &quot;correct&quot;: true,
+  &quot;support_level&quot;: &quot;step&quot;,
+  &quot;support_event_ids&quot;: [&quot;event_022&quot;],
+  &quot;outcome&quot;: &quot;supported_success&quot;
+}
+</code></pre>
+<p>后端读取这个结果，再让 <code>supported_successes</code> 增加 1。</p>
+<p>如果答案正确，而且记录确认作答前没有收到超出允许条件的帮助，就可以判为 <code>independent_success</code>，让对应计数增加 1。</p>
+<p><strong>但“得到帮助后答对”还需要避免两种误判。</strong></p>
+<p>第一，<strong>直接复述答案不等于在帮助下完成解题</strong>。我建议单独记录为 <code>answer_reproduction</code>，不要混进 <code>supported_successes</code>。如果任务目标本来就是跟读，则应按跟读任务的标准评分。</p>
+<p>第二，<strong>刚被告知答案，再把同一道题做对，不能直接算新的独立成功</strong>。需要保留“之前见过本题答案”的记录。若想检查能否独立应用，应该安排未透露答案的新题或变式题。</p>
+<p>例如，下面这段互动可以这样累计：</p>
+<ol>
+<li>学生第一次答错：两个成功计数都不增加。</li>
+<li>助教提供一个步骤，学生完成剩余步骤并答对：<code>supported_successes + 1</code>。</li>
+<li>老师给一道新的同类题，学生没有额外帮助就答对：<code>independent_successes + 1</code>。</li>
+</ol>
+<p>同一次完成只累计一次，重试、消息重发或重复评估不能重复计数。底层保留全部作答记录，汇总计数按任务结果生成。</p>
+<p><strong>还有一个需要准确表达的边界：这个方法判定的是“在什么帮助条件下完成”，不能直接证明“帮助导致了成功”。</strong> 学生有可能本来就会，只是助教提前提示了；我们只能把这一题记为“有帮助条件下完成”，再用无提示的新题观察独立表现。</p>
+<p>因此，研发真正需要保存的核心是：<strong>题目、评分结果、帮助记录、时间顺序和判定依据</strong>。这两个数字只是这些证据的汇总，也不能单独代表学生已经掌握了知识。</p>
+</div></details>
+  
+</article><article class="chapter" id="topic-08">
+  <div class="chapter-heading"><span class="chapter-number">08</span><h2>如何与合作伙伴分享对话</h2><button class="copy-link" data-id="topic-08" aria-label="复制话题链接：如何与合作伙伴分享对话" title="复制此话题链接">↗</button></div>
+  <div class="question"><div class="speaker">用户 · 提问</div><div class="prose"><p>我想跟我的合作伙伴共享我们的对话，我应该怎么做？</p>
+</div></div><details class="answer" open><summary><span class="speaker">AI · 回答</span><span class="toggle-hint">展开 / 收起</span></summary><div class="prose"><p>可以通过 <strong>Share（分享）生成这段对话的只读链接</strong>，发给合作伙伴。根据 <a href="https://learn.chatgpt.com/docs/use-chatgpt#share-a-read-only-snapshot-of-a-codex-thread" target="_blank" rel="noopener noreferrer">OpenAI 官方说明</a>，操作如下：</p>
+<ol>
+<li>在当前对话中找到并点击 <strong>Share／分享</strong>。</li>
+<li>如果使用工作区账号，选择允许访问的成员或群组。</li>
+<li>等待上传完成，点击 <strong>Copy link／复制链接</strong>。</li>
+<li>自己先打开确认内容，再发给合作伙伴。</li>
+</ol>
+<p>需要留意：</p>
+<ul>
+<li><strong>这是当前对话的快照</strong>，我们后续的新消息不会自动同步到这个链接。</li>
+<li>个人账号分享的链接，任何拿到链接的人都能查看；工作区账号则限于获授权的工作区成员。</li>
+<li>合作伙伴可以阅读，但不能通过该链接直接加入我们这条对话。以上规则见<a href="https://learn.chatgpt.com/docs/use-chatgpt#share-a-read-only-snapshot-of-a-codex-thread" target="_blank" rel="noopener noreferrer">官方分享说明</a>。</li>
+</ul>
+<p>如果你当前界面找不到 <strong>Share</strong>，可以发一张界面截图，我帮你定位。</p>
+</div></details>
+  
+</article><article class="chapter" id="topic-09">
+  <div class="chapter-heading"><span class="chapter-number">09</span><h2>状态变更如何追溯</h2><button class="copy-link" data-id="topic-09" aria-label="复制话题链接：状态变更如何追溯" title="复制此话题链接">↗</button></div>
+  <div class="question"><div class="speaker">用户 · 提问</div><div class="prose"><p>这个具体在研发侧如何实现？我是个AI产品经理，我需要了解研发的实现方式，来评估我的文档应该怎么描述
+每次修改还应保留：<strong>修改前是什么、修改后是什么、依据哪条课堂事件、用了哪个版本的更新规则。</strong> 出现“学生突然变聪明”的问题时，研发可以追溯。</p>
+</div></div><details class="answer" open><summary><span class="speaker">AI · 回答</span><span class="toggle-hint">展开 / 收起</span></summary><div class="prose"><p>研发侧可以把它实现为：<strong>一份“学生当前状态”，加一份只能追加的“状态变更记录”。每次更新状态时，同时写入变更记录。</strong></p>
+<p>你在产品文档里，重点要写清楚“哪些变化必须留痕、记录什么、如何查看，以及怎样算验收通过”，数据库表怎么拆可以交给研发决定。</p>
+<p>我用一次具体变化来说明。</p>
+<p><strong>假设学生在助教提示后，完成了一道进位题。</strong></p>
+<p>更新前，系统记录：</p>
+<blockquote>
+<p>进位能力：正在学习；提示下成功次数：0。</p>
+</blockquote>
+<p>更新后，系统记录：</p>
+<blockquote>
+<p>进位能力：提示下完成；提示下成功次数：1。</p>
+</blockquote>
+<p>如果只覆盖当前状态，课后只能看到“提示下完成”，不知道它怎么来的。因此需要同时保留下面这条变更记录。字段名只是示例：</p>
+<pre><code class="language-json">{
+  &quot;change_id&quot;: &quot;change_042&quot;,
+  &quot;student_id&quot;: &quot;student_008&quot;,
+  &quot;simulation_id&quot;: &quot;run_001&quot;,
+  &quot;task_id&quot;: &quot;task_007&quot;,
+  &quot;target&quot;: &quot;skills.math.addition.carry&quot;,
+
+  &quot;before&quot;: {
+    &quot;status&quot;: &quot;learning&quot;,
+    &quot;supported_successes&quot;: 0
+  },
+  &quot;after&quot;: {
+    &quot;status&quot;: &quot;with_support&quot;,
+    &quot;supported_successes&quot;: 1
+  },
+
+  &quot;evidence_event_ids&quot;: [
+    &quot;event_022&quot;,
+    &quot;event_023&quot;
+  ],
+  &quot;reason_code&quot;: &quot;CORRECT_AFTER_STEP_HINT&quot;,
+  &quot;rule_version&quot;: &quot;learning_rules_v0.3&quot;,
+
+  &quot;state_version_before&quot;: 7,
+  &quot;state_version_after&quot;: 8,
+  &quot;created_at&quot;: &quot;2026-09-30T10:05:12Z&quot;
+}
+</code></pre>
+<p>这里有几个重要区别：</p>
+<ul>
+<li><strong><code>before / after</code></strong>：实际改了什么，可以只记录被修改的字段。</li>
+<li><strong><code>evidence_event_ids</code></strong>：依据是什么。例如 <code>event_022</code> 是助教提示，<code>event_023</code> 是学生回答。两条事件本身需要保存内容、发送者和顺序。</li>
+<li><strong><code>reason_code</code></strong>：为什么满足更新条件，例如“逐步提示后回答正确”。它是业务判定理由，不需要保存模型的内部思考过程。</li>
+<li><strong><code>rule_version</code></strong>：用的是哪一版学习更新规则。</li>
+<li><strong><code>state_version</code></strong>：这个学生状态的第几次更新，用来确认先后顺序，避免互相覆盖。</li>
+</ul>
+<p><strong>一次更新，在后端大致经过四步。</strong></p>
+<ol>
+<li><p><strong>先保存课堂事件。</strong><br>记录老师或助教说了什么、学生回答了什么，并给每条事件分配唯一 ID。</p>
+</li>
+<li><p><strong>评估并生成变更方案。</strong><br>更新模块读取当前状态、相关事件和指定版本的规则，算出“哪些字段应该从什么改成什么”。</p>
+</li>
+<li><p><strong>检查这次变更是否合法。</strong><br>例如，关联的事件是否存在、是否属于这个学生和本次模拟、该事件是否已经处理过，以及状态有没有被另一条更新抢先修改。</p>
+</li>
+<li><p><strong>同时保存新状态和变更记录。</strong><br>对使用关系型数据库的第一版，可以把这两次写入放在同一个数据库事务里：要么都成功，要么都不生效。</p>
+</li>
+</ol>
+<p>第 4 步可以避免一种很麻烦的情况：学生能力已经变了，但记录保存失败，之后再也查不出原因。</p>
+<p>如果评估环节需要调用大模型，通常先完成模型评估，再进入短暂的数据库事务；提交前重新检查状态版本。如果状态已经变化，就重新评估或重试，不能直接覆盖。</p>
+<p><strong>“保存规则版本”不只是写一个版本号。</strong></p>
+<p>研发还需要保留这个版本对应的实际规则。</p>
+<p>例如：</p>
+<blockquote>
+<p><code>learning_rules_v0.3</code>：在逐步提示下答对，累计一次提示下成功；不直接升级为独立完成。</p>
+</blockquote>
+<p>后来改成 <code>v0.4</code>，旧版本仍应可查询。否则，日志虽然写着 <code>v0.3</code>，研发也无法知道当时到底执行了什么。</p>
+<p>如果判定依赖大模型，还应关联一条评估记录，保留：</p>
+<ul>
+<li>当时使用的模型标识；</li>
+<li>评估提示词和评分标准的版本；</li>
+<li>实际用于评估的输入或其可还原引用；</li>
+<li>模型当时输出的结构化判定。</li>
+</ul>
+<p>这样才能查看<strong>当时实际判了什么</strong>。仅保留模型名称、以后再调用一次，不保证得到同样结果。</p>
+<p><strong>发现“学生突然变聪明”时，排查会沿着这条链进行。</strong></p>
+<p>假设第 12 轮学生突然独立解决了难题：</p>
+<p>先查看<strong>第 12 轮生成回答时实际使用的状态版本和上下文记录</strong>，再定位该状态之前的变更，最后打开对应的课堂证据和规则版本。</p>
+<p>这能区分几类问题：</p>
+<ul>
+<li><strong>状态本身被错误提升</strong>：检查更新规则或评估结果。</li>
+<li><strong>状态没有提升，但学生仍答得过强</strong>：检查学生生成是否遵守能力限制。</li>
+<li><strong>数据库状态正确，但调用使用了别的版本</strong>：检查上下文组装或缓存。</li>
+<li><strong>答案提前进入了学生上下文</strong>：检查消息权限和题目答案泄露。</li>
+</ul>
+<p>所以，除了变更记录，我建议你的文档增加一条要求：<strong>每次学生生成行动，都要关联它实际使用的状态版本和输入记录。</strong> 只记录数据库怎么变，还不足以解释学生当时为什么这样表现。</p>
+<p><strong>产品侧可以提供一个简单的“学生状态历史”查看入口。</strong></p>
+<p>打开某次模拟后，你能按课堂顺序看到：</p>
+<blockquote>
+<p>第 7 轮｜进位能力：正在学习 → 提示下完成<br>依据：助教步骤提示＋学生正确回答<br>更新规则：v0.3<br>状态版本：7 → 8</p>
+</blockquote>
+<p>点击后查看原始课堂事件、评估结果和字段变化。这个页面供产品、研发和测试排查使用，学生 Agent 本身不需要读取整套审计记录。</p>
+<p>如果发现判定错误，修正时也应该<strong>追加一条更正记录，关联原变更</strong>，保留原始过程。</p>
+<p>你可以在 PRD 里直接这样描述：</p>
+<blockquote>
+<p>**学生状态变更追溯要求：**系统对学生能力、记忆及约定范围内的课堂状态进行持久化修改时，须记录变更前后值、所属学生和模拟、依据事件、判定原因、更新规则版本、状态版本及时间。当前状态与变更记录须保持一致。相同事件重复处理不得造成重复累计。每次学生行动须关联实际使用的状态版本与输入记录，支持从异常行为追溯至状态变化、判定结果和原始课堂证据。</p>
+</blockquote>
+<p>对应的验收标准可以写成：</p>
+<ul>
+<li>一次能力变化，可以查到修改前后值及原始证据。</li>
+<li>同一事件重复提交，不会重复增加成功次数。</li>
+<li>保存失败时，不会出现“状态已变、记录缺失”。</li>
+<li>规则升级后，仍能查看历史变更所用的旧规则。</li>
+<li>任意一次学生回答，都能查到当时实际使用的状态和上下文。</li>
+<li>人工更正后，原记录和更正记录均可追溯。</li>
+</ul>
+<p>不必要求第一版建设复杂的全量事件回放系统；<strong>当前状态＋不可覆盖的变更记录＋调用输入关联</strong>，就能覆盖你现在最关心的排查需求。</p>
+</div></details>
+  
+</article><article class="chapter" id="topic-10">
+  <div class="chapter-heading"><span class="chapter-number">10</span><h2>学习规则与年龄、地区、学科</h2><button class="copy-link" data-id="topic-10" aria-label="复制话题链接：学习规则与年龄、地区、学科" title="复制此话题链接">↗</button></div>
+  <div class="question"><div class="speaker">用户 · 提问</div><div class="prose"><p>你这里提到了“学习规则”，这个学习规则是什么？不同年龄是否不同，不同年龄、不同国家，不同的科目是否也不同？我应该怎么设计？
+<strong>模拟学习发生</strong>：学生收到讲解或提示后，按我们设定的学习规则，更新其模拟知识状态。</p>
+</div></div><details class="answer" open><summary><span class="speaker">AI · 回答</span><span class="toggle-hint">展开 / 收起</span></summary><div class="prose"><p><strong>“学习规则”就是：系统用什么机制，决定一次教学经历会让这个模拟学生发生什么变化。</strong> 它需要考虑年龄、已有知识、语言能力和学科特点，但我建议采用“共同框架＋具体知识点规则＋个体参数”，不要为每个“年龄 × 国家 × 科目”分别写一套。</p>
+<p>先修正我前面一个过于简化的说法：<strong>“得到提示后答对，就把能力升级”主要是表现记录与能力评估规则，还不能完整代表学习过程。</strong></p>
+<p><strong>需要区分三类规则。</strong></p>
+<ul>
+<li><strong>学习规则</strong>：收到讲解、练习或反馈以后，内部知识如何变化。例如，原先不知道“十个一可以换成一个十”，演示后形成了这个概念的初步理解。</li>
+<li><strong>表现规则</strong>：在当前知识、语言和课堂状态下，学生如何作答。例如，理解了进位，但计算时仍可能出错。</li>
+<li><strong>评估规则</strong>：观察到这次作答以后，系统如何判断学生的掌握情况。例如，提示下答对只能增加相应证据，不能直接认定独立掌握。</li>
+</ul>
+<p>知识追踪研究也区分了学习状态与作答表现：学生可能会却失误，也可能不会却猜对。因此不能把一次答对直接等同于知识增长。<a href="https://www.cs.cmu.edu/~listen/BNT-SM/lr-dbn.html" target="_blank" rel="noopener noreferrer">CMU 的知识追踪说明</a></p>
+<p>对我们的模拟器来说，<strong>学习规则负责改变内部状态，表现规则负责生成行为，评估规则负责解读行为</strong>。三者要有关联，但不能混成一条“答对就升级”。</p>
+<p><strong>年龄应该影响哪些地方？</strong></p>
+<p>我建议年龄主要用于生成初始配置，再用具体能力覆盖默认值。例如：</p>
+<ul>
+<li>能理解怎样的语言和指令；</li>
+<li>是否具备当前任务需要的阅读、数量、符号等基础能力；</li>
+<li>在我们的模拟设定里，能处理多长、多复杂的操作序列；</li>
+<li>表达理解时，可以用指认、操作、短句还是较完整的解释。</li>
+</ul>
+<p>这些应该作为可配置、需要校准的特征，不能直接写成“5 岁要教五遍，10 岁教两遍”。</p>
+<p>例如，两个同为 8 岁的学生，一个已经理解数位，一个还没有理解，面对相同进位演示，模拟学习结果应该允许不同。这里起直接作用的是<strong>先备知识是否具备</strong>，年龄只是背景。</p>
+<p><strong>国家应该影响哪些地方？</strong></p>
+<p>我不建议直接设计“日本学生学习速度”“沙特学生遗忘速度”这样的参数。</p>
+<p>国家或地区更适合关联这些具体信息：</p>
+<ul>
+<li>使用什么课程体系，之前接触过哪些知识；</li>
+<li>家庭语言、学校语言和本节课教学语言；</li>
+<li>对题目里的情境、单位和表达是否熟悉；</li>
+<li>学过哪些解题方法或书写约定。</li>
+</ul>
+<p>例如，一个学生不会用英语回答科学问题，可能是表达受限，也可能没有理解科学概念。我们的规则应分别处理这两种情况。</p>
+<p>国家帮助我们配置背景；<strong>不能仅凭国家推定某个学生的认知能力、性格或学习速度</strong>。</p>
+<p><strong>科目需要不同，进一步说，要具体到知识点和任务。</strong></p>
+<p>同一个科目内部，学习过程也不完全相同：</p>
+<ul>
+<li><strong>英语词汇</strong>：辨认图片、听懂单词、主动说出单词，需要分别记录。</li>
+<li><strong>数学进位</strong>：数位理解、十换一、计算步骤和独立应用，需要分别记录。</li>
+<li><strong>科学概念</strong>：记住术语、理解解释、用概念预测新现象，需要分别记录。</li>
+</ul>
+<p>因此，“学会英语”或者“数学能力增加 10 分”都太粗。更合适的是：</p>
+<blockquote>
+<p>这次教学可能影响哪个具体知识点的哪种能力？在什么任务条件下能够表现出来？</p>
+</blockquote>
+<p>这样，学生学会认出单词，不会自动被更新成能熟练造句；会模仿一道数学例题，也不会自动获得整类题目的迁移能力。</p>
+<p><strong>设计时，建议你给每条学习规则写一张“规则卡”。</strong></p>
+<p>不必一开始写复杂算法，先把下面六件事描述清楚：</p>
+<ol>
+<li><strong>作用对象</strong>：更新哪个知识点、哪个能力维度。</li>
+<li><strong>触发经历</strong>：什么课堂事件可能产生学习，例如演示、解释、练习、纠错。</li>
+<li><strong>生效条件</strong>：需要哪些先备知识，学生是否接收到并能理解教学信息。</li>
+<li><strong>变化范围</strong>：哪些内部状态可以改变，是否允许不变，以及变化幅度如何配置。</li>
+<li><strong>暂不获得的能力</strong>：这次经历尚不足以支持什么，例如独立迁移或长期保持。</li>
+<li><strong>验证与依据</strong>：预期出现什么后续表现；规则来自真实数据、教研判断，还是人为设定的测试场景。</li>
+</ol>
+<p>其中第 4 项不能默认“讲了就学会”。可以采用确定性的场景配置，也可以采用概率模型；如果使用概率，就要记录参数来源和版本，避免模型每轮随意决定学习速度。</p>
+<p><strong>以“十个一换成一个十”为例，一张初版规则卡可以这样写。</strong></p>
+<blockquote>
+<p>**规则名称：**通过实物演示建立十换一的初步映射。<br>**作用对象：**十进制数位概念中的“十换一”。<br>**触发经历：**老师或助教完成小棒分组演示，并邀请学生参与一次交换操作。<br>**前提条件：**学生已能数到十，理解当前操作指令，并实际接收到演示。<br>**变化配置：**测试场景 A 设定本次经历后形成实物层面的映射；场景 B 设定仍保留原有误解，需要进一步教学。<br>**变化边界：**不自动获得纸笔进位算法，也不自动获得英文解释能力。<br>**后续检查：**换一组小棒，观察能否完成交换；再换成纯数字题，检查迁移表现。<br>**依据状态：**初版为教研定义的模拟假设，尚未通过真实学生数据校准。</p>
+</blockquote>
+<p>这里刻意设置了两种可能结果。第一版先用它们测试老师能否识别学生差异、采取不同教学行动，比凭空设定一个“演示后 80% 学会”的数字更容易审查。</p>
+<p>年龄、语言和课程背景，都通过前提条件与个体配置进入这条规则；不需要复制出十几套几乎相同的规则。</p>
+<p><strong>产品文档还需要明确：我们当前在做哪一种模拟。</strong></p>
+<p>如果目的是<strong>测试老师和助教的流程</strong>，可以使用人为定义、可重复的学习场景。例如：</p>
+<blockquote>
+<p>该学生在泛泛鼓励后仍保留误解；在具体演示后形成初步理解；换成符号题仍需要帮助。</p>
+</blockquote>
+<p>这是一个可验收的测试设定。</p>
+<p>如果目的是<strong>预测真实儿童的学习效果，或比较两种教学方案哪种更有效</strong>，就需要真实课堂记录、学习前后表现和独立验证来校准。否则，我们规定“某种提示有效”，模拟结果自然就会显示它有效，无法据此证明教学优势。学生模拟研究也强调，知识边界与学习变化的真实性，需要独立验证，不能仅凭对话听起来像学生来判断。<a href="https://arxiv.org/abs/2601.05473" target="_blank" rel="noopener noreferrer">学生模拟有效性框架</a></p>
+<p>针对你现在的阶段，我建议 PRD 先这样规定：</p>
+<blockquote>
+<p>系统按知识点配置学习状态转移规则。规则结合学生先备知识、教学语言理解、当前状态和实际接收到的教学经历，决定内部知识是否及如何变化。年龄用于初始化相关特征，国家或地区用于配置课程和语言背景，不直接决定学习速度。学习状态、作答表现和掌握评估分别记录。所有规则须标明适用范围、版本和依据，未经数据校准的规则须标记为模拟假设。</p>
+</blockquote>
+<p>下一步应先选择一个小知识点，写出<strong>基础已具备、基础有缺口、教学语言受限</strong>三种学生配置，用同一段教学检查规则是否能产生合理差异。等这一套跑通，再扩展到不同年龄、地区和学科。</p>
+</div></details>
+  
+</article><article class="chapter" id="topic-11">
+  <div class="chapter-heading"><span class="chapter-number">11</span><h2>生成 HTML 并发布到 GitHub</h2><button class="copy-link" data-id="topic-11" aria-label="复制话题链接：生成 HTML 并发布到 GitHub" title="复制此话题链接">↗</button></div>
+  <div class="question"><div class="speaker">用户 · 提问</div><div class="prose"><p>你能够连接我的github么？你帮我把咱们这个任务下的对话，直接生成html，然后部署到我的GitHub吧</p>
+</div></div>
+  <p class="snapshot-note">快照截至这条发布请求；网页生成过程不在本次正文范围内。</p>
+</article></div>
+      <footer><span class="footer-mark">三 / CLASSROOM NOTES</span><p>截至首次 HTML 发布请求的用户消息与正式答复；不包含工具日志、内部信息和过程提示。</p><p>正文保留原始问答；标题和目录为阅读辅助。讨论包含提案及后续修正，请结合上下文阅读。该页面为静态快照，后续对话不会自动同步。</p><a href="#top">回到顶部 ↑</a></footer>
+    </main>
+  </div>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script>(() => {
+  const articles = [...document.querySelectorAll('.chapter')];
+  const answers = [...document.querySelectorAll('.answer')];
+  const links = [...document.querySelectorAll('.toc a')];
+  const search = document.querySelector('#search');
+  const status = document.querySelector('#search-status');
+  const defaultStatus = status.textContent;
+  const texts = articles.map(a => a.textContent.toLocaleLowerCase());
+  let toastTimer;
+  function toast(text) {
+    const el = document.querySelector('#toast');
+    el.textContent = text; el.classList.add('visible');
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('visible'), 2400);
+  }
+  search.addEventListener('input', () => {
+    const query = search.value.trim().toLocaleLowerCase();
+    let matches = 0;
+    articles.forEach((article, i) => {
+      const visible = !query || texts[i].includes(query);
+      article.hidden = !visible; links[i].hidden = !visible;
+      if (visible) { matches++; if (query) article.querySelectorAll('details').forEach(d => d.open = true); }
+    });
+    status.textContent = query ? `找到 ${matches} 个相关话题` : defaultStatus;
+    document.querySelector('#empty').hidden = matches !== 0;
+    updateProgress();
+  });
+  document.querySelector('#expand').addEventListener('click', () => answers.forEach(d => d.open = true));
+  document.querySelector('#collapse').addEventListener('click', () => answers.forEach(d => d.open = false));
+  links.forEach(link => link.addEventListener('click', () => {
+    document.querySelector(link.getAttribute('href'))?.querySelectorAll('details').forEach(d => d.open = true);
+  }));
+  document.querySelectorAll('.copy-link').forEach(button => button.addEventListener('click', async () => {
+    const url = new URL(location.href); url.hash = button.dataset.id;
+    try { await navigator.clipboard.writeText(url.href); toast('话题链接已复制'); }
+    catch { location.hash = button.dataset.id; toast('已定位此话题，可复制浏览器地址分享'); }
+  }));
+  document.addEventListener('keydown', event => {
+    if (event.key === '/' && !event.ctrlKey && !event.metaKey && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) {
+      event.preventDefault(); search.focus();
+    }
+    if (event.key === 'Escape' && document.activeElement === search) {
+      search.value = ''; search.dispatchEvent(new Event('input')); search.blur();
+    }
+  });
+  let printState;
+  window.addEventListener('beforeprint', () => { printState = answers.map(d => d.open); answers.forEach(d => d.open = true); });
+  window.addEventListener('afterprint', () => { if (printState) answers.forEach((d, i) => d.open = printState[i]); });
+  document.querySelector('#print').addEventListener('click', () => window.print());
+  function updateProgress() {
+    const max = document.documentElement.scrollHeight - innerHeight;
+    document.querySelector('.reading-progress').style.width = `${max > 0 ? Math.min(100, scrollY / max * 100) : 0}%`;
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  window.addEventListener('resize', updateProgress);
+  const observer = new IntersectionObserver(entries => {
+    for (const entry of entries) if (entry.isIntersecting) {
+      links.forEach(link => { const active = link.dataset.topic === entry.target.id; link.classList.toggle('active', active); if (active) link.setAttribute('aria-current', 'location'); else link.removeAttribute('aria-current'); });
+    }
+  }, { rootMargin: '-80px 0px -65% 0px', threshold: 0 });
+  articles.forEach(article => observer.observe(article));
+  updateProgress();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AI 老师、AI 助教与 AI 学生的课堂设计讨论：学生 Persona、能力与记忆、状态更新、学习规则及研发落地。">
+  <meta name="theme-color" content="#f6f5ef">
+  <title>{{TITLE}}</title>
+  <style>{{CSS}}</style>
+</head>
+<body>
+  <div class="reading-progress" aria-hidden="true"></div>
+  <a class="skip-link" href="#main">跳到对话正文</a>
+  <header class="topbar"><a class="brand" href="#top"><span class="brand-icon">三</span> CLASSROOM NOTES</a><span class="edition">设计讨论 · {{DATE}}</span><a class="source" href="https://github.com/RosannaBebe/ai-classroom-dialogue" target="_blank" rel="noopener noreferrer">GitHub ↗</a></header>
+  <div class="layout" id="top">
+    <aside class="sidebar" aria-label="阅读工具和话题目录">
+      <div class="sidebar-inner">
+        <div class="small-label">在讨论中查找</div>
+        <label class="search-box"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="搜索关键词…" aria-label="搜索对话关键词"><kbd>/</kbd></label>
+        <p class="search-status" id="search-status" role="status">{{TOPIC_COUNT}} 个话题 · {{MESSAGE_COUNT}} 条消息</p>
+        <div class="small-label contents-label">讨论目录</div>
+        <nav class="toc">{{NAV}}</nav>
+        <div class="sidebar-bottom"><a href="conversation.md" download>↓ 下载对话原文</a><button id="print">打印 / 保存 PDF</button></div>
+      </div>
+    </aside>
+    <main id="main">
+      <section class="hero" aria-labelledby="page-title">
+        <div class="eyebrow"><span></span> 从想法到实现 · 对话记录</div>
+        <h1 id="page-title">一间课堂，<br>三个 <em>Agent。</em></h1>
+        <p class="hero-description">关于 AI 老师、AI 助教与 AI 学生的设计讨论。<br class="desktop-break">从学生 Persona 出发，一步步走向可追溯的学习模拟。</p>
+        <div class="roles"><span><i class="role-dot teacher"></i>老师 · 引导教学</span><span><i class="role-dot assistant"></i>助教 · 提供支持</span><span><i class="role-dot student"></i>学生 · 模拟学习</span></div>
+        <div class="hero-meta"><span>{{TOPIC_COUNT}} 个话题</span><span>{{MESSAGE_COUNT}} 条原始消息</span><span>{{DATE}} 快照</span></div>
+      </section>
+      <div class="reading-toolbar"><span>按对话发生顺序完整保留</span><div><button id="expand">展开回答</button><button id="collapse">收起回答</button></div></div>
+      <p id="empty" hidden>没有找到相关话题。试试“记忆”“学习规则”或“独立完成”。</p>
+      <div id="chapters">{{CHAPTERS}}</div>
+      <footer><span class="footer-mark">三 / CLASSROOM NOTES</span><p>{{SCOPE}}</p><p>正文保留原始问答；标题和目录为阅读辅助。讨论包含提案及后续修正，请结合上下文阅读。该页面为静态快照，后续对话不会自动同步。</p><a href="#top">回到顶部 ↑</a></footer>
+    </main>
+  </div>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script>{{JS}}</script>
+</body>
+</html>
