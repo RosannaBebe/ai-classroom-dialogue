@@ -23,7 +23,6 @@ const chapters = data.chapters.map((c, i) => `<article class="chapter" id="${c.i
   ${c.messages.map(m => m.role === 'user'
     ? `<div class="question"><div class="speaker">用户 · 提问</div><div class="prose">${marked.parse(m.text)}</div></div>`
     : `<details class="answer" open><summary><span class="speaker">AI · 回答</span><span class="toggle-hint">展开 / 收起</span></summary><div class="prose">${marked.parse(m.text)}</div></details>`).join('')}
-  ${c.messages.length === 1 ? '<p class="snapshot-note">快照截至这条发布请求；网页生成过程不在本次正文范围内。</p>' : ''}
 </article>`).join('');
 const replacements = {
   TITLE: escape(data.title), DATE: escape(data.date), NAV: nav, CHAPTERS: chapters,
@@ -32,4 +31,12 @@ const replacements = {
 };
 const html = read('template.html').replace(/\{\{([A-Z_]+)\}\}/g, (_, key) => replacements[key] ?? '');
 fs.writeFileSync(new URL('index.html', root), html);
+const markdown = [`# ${data.title}`, `日期：${data.date}`, data.scope];
+for (const chapter of data.chapters) {
+  markdown.push(`## ${chapter.title}`);
+  for (const message of chapter.messages) {
+    markdown.push(`### ${message.role === 'user' ? '用户' : 'AI'}`, message.text);
+  }
+}
+fs.writeFileSync(new URL('conversation.md', root), markdown.join('\n\n') + '\n');
 console.log(`Built ${data.chapters.length} topics / ${messageCount} messages / ${Buffer.byteLength(html)} bytes`);
