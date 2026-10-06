@@ -5,6 +5,14 @@
   const search = document.querySelector('#search');
   const status = document.querySelector('#search-status');
   const defaultStatus = status.textContent;
+  const personaMaps = [...document.querySelectorAll('.persona-chapter')].map(article => {
+    const select = article.querySelector('select');
+    const panels = [...article.querySelectorAll('.persona-panel')];
+    const selectModule = index => { select.value = String(index); panels.forEach((panel, i) => { panel.hidden = i !== index; }); };
+    select.addEventListener('change', () => { selectModule(Number(select.value)); updateProgress(); });
+    selectModule(0);
+    return { article, select, panels, selectModule };
+  });
   const texts = articles.map(a => a.textContent.toLocaleLowerCase());
   let toastTimer;
   function toast(text) {
@@ -20,13 +28,20 @@
       article.hidden = !visible; links[i].hidden = !visible;
       if (visible) { matches++; if (query) article.querySelectorAll('details').forEach(d => d.open = true); }
     });
-    status.textContent = query ? `找到 ${matches} 个相关话题` : defaultStatus;
+    personaMaps.forEach(({ select, panels, selectModule }) => {
+      const first = panels.findIndex(panel => panel.textContent.toLocaleLowerCase().includes(query));
+      if (query && first >= 0) selectModule(first);
+      [...select.options].forEach((option, i) => { option.disabled = Boolean(query && first >= 0 && !panels[i].textContent.toLocaleLowerCase().includes(query)); });
+    });
+    document.querySelector('#personas').hidden = personaMaps.every(({ article }) => article.hidden);
+    status.textContent = query ? `找到 ${matches} 个相关内容` : defaultStatus;
     document.querySelector('#empty').hidden = matches !== 0;
     updateProgress();
   });
   document.querySelector('#expand').addEventListener('click', () => answers.forEach(d => d.open = true));
   document.querySelector('#collapse').addEventListener('click', () => answers.forEach(d => d.open = false));
-  links.forEach(link => link.addEventListener('click', () => {
+  document.querySelectorAll('.toc a, .persona-shortcuts a').forEach(link => link.addEventListener('click', () => {
+    if (search.value) { search.value = ''; search.dispatchEvent(new Event('input')); }
     document.querySelector(link.getAttribute('href'))?.querySelectorAll('details').forEach(d => d.open = true);
   }));
   document.querySelectorAll('.copy-link').forEach(button => button.addEventListener('click', async () => {
@@ -35,7 +50,7 @@
     catch { location.hash = button.dataset.id; toast('已定位此话题，可复制浏览器地址分享'); }
   }));
   document.addEventListener('keydown', event => {
-    if (event.key === '/' && !document.querySelector('#comment-drawer')?.open && !event.ctrlKey && !event.metaKey && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) {
+    if (event.key === '/' && !document.querySelector('#comment-drawer')?.open && !event.ctrlKey && !event.metaKey && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) {
       event.preventDefault(); search.focus();
     }
     if (event.key === 'Escape' && document.activeElement === search) {

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="AI 老师、AI 助教与 AI 学生的课堂设计讨论：学生 Persona、能力与记忆、状态更新、学习规则及研发落地。">
+  <meta name="description" content="AI 课堂设计讨论，以及学生、老师、助教三个 Agent 的 Persona 结构图谱：21 个模块的构建步骤、运行机制与行为边界。">
   <meta name="theme-color" content="#f6f5ef">
   <title>{{TITLE}}</title>
   <style>{{CSS}}</style>
@@ -17,10 +17,10 @@
       <div class="sidebar-inner">
         <div class="small-label">在讨论中查找</div>
         <label class="search-box"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="搜索关键词…" aria-label="搜索对话关键词"><kbd>/</kbd></label>
-        <p class="search-status" id="search-status" role="status">{{TOPIC_COUNT}} 个话题 · {{MESSAGE_COUNT}} 条消息</p>
+        <p class="search-status" id="search-status" role="status">{{TOPIC_COUNT}} 个话题 · 3 份 Persona 图谱</p>
         <div class="small-label contents-label">讨论目录</div>
         <nav class="toc">{{NAV}}</nav>
-        <div class="sidebar-bottom"><button data-open-comments aria-haspopup="dialog">留言与讨论</button><a href="conversation.md" download>↓ 下载对话原文</a><button id="print">打印 / 保存 PDF</button></div>
+        <div class="sidebar-bottom"><button data-open-comments aria-haspopup="dialog">留言与讨论</button><a href="conversation.md" download>↓ 下载对话原文</a><a href="personas.md" download>↓ 下载三角色 Persona</a><button id="print">打印 / 保存 PDF</button></div>
       </div>
     </aside>
     <main id="main">
@@ -29,11 +29,23 @@
         <h1 id="page-title">一间课堂，<br>三个 <em>Agent。</em></h1>
         <p class="hero-description">关于 AI 老师、AI 助教与 AI 学生的设计讨论。<br class="desktop-break">从学生 Persona 出发，一步步走向可追溯的学习模拟。</p>
         <div class="roles"><span><i class="role-dot teacher"></i>老师 · 引导教学</span><span><i class="role-dot assistant"></i>助教 · 提供支持</span><span><i class="role-dot student"></i>学生 · 模拟学习</span></div>
+        <nav class="persona-shortcuts" aria-label="直达 Persona 结构图谱">{{PERSONA_LINKS}}</nav>
         <div class="hero-meta"><span>{{TOPIC_COUNT}} 个话题</span><span>{{MESSAGE_COUNT}} 条原始消息</span><span>{{DATE}} 快照</span></div>
       </section>
       <div class="reading-toolbar"><span>Agent 构建讨论 · 按原始顺序保留</span><div><button id="expand">展开回答</button><button id="collapse">收起回答</button></div></div>
       <p id="empty" hidden>没有找到相关话题。试试“记忆”“学习规则”或“独立完成”。</p>
       <div id="chapters">{{CHAPTERS}}</div>
+      <section id="personas" aria-labelledby="personas-title">
+        <div class="persona-intro">
+          <div class="eyebrow"><span></span> 设计补充 · {{PERSONA_DATE}}</div>
+          <h2 id="personas-title">三个角色，三份 Persona。</h2>
+          <p>每个角色包含 7 个模块，可切换查看包含内容、构建步骤、运行机制和行为边界。</p>
+          <p>学生 Persona 描述相对稳定的行为倾向，知识能力、当前状态和记忆分别建模。老师统筹课堂，助教提供个体支持；职责、知识正确性、权限和评价标准由系统规定，Persona 决定约束内的行为倾向。</p>
+          <p>年龄、语言、课程体系及学情用于适配，不按国籍预设性格或能力。{{PERSONA_NOTE}}</p>
+          <a href="personas.md" download>下载完整 Persona 文档 ↓</a>
+        </div>
+        {{PERSONAS}}
+      </section>
       <section class="comments" id="comments" aria-labelledby="comments-title">
         <div class="eyebrow"><span></span> 继续这场讨论</div>
         <h2 id="comments-title">你的问题，也可以成为下一步。</h2>
@@ -41,7 +53,7 @@
         <div class="comment-actions"><button class="comment-button" data-open-comments aria-haspopup="dialog">写下留言</button><button class="view-comments" data-open-comments aria-haspopup="dialog">查看留言</button></div>
         <p class="comment-note">无需登录或填写昵称。留言公开可见。</p>
       </section>
-      <footer><span class="footer-mark">三 / CLASSROOM NOTES</span><p>{{SCOPE}}</p><p>正文保留原始问答；标题和目录为阅读辅助。讨论包含提案及后续修正，请结合上下文阅读。该页面为静态快照，后续对话不会自动同步。</p><a href="#top">回到顶部 ↑</a></footer>
+      <footer><span class="footer-mark">三 / CLASSROOM NOTES</span><p>{{SCOPE}}</p><p>对话部分保留原始问答；Persona 图谱为 {{PERSONA_DATE}} 根据后续讨论整理的设计补充。标题和目录为阅读辅助，讨论包含提案及后续修正，请结合上下文阅读。后续对话不会自动同步。</p><a href="#top">回到顶部 ↑</a></footer>
     </main>
   </div>
   <dialog id="comment-drawer" class="comment-drawer" aria-labelledby="drawer-title">

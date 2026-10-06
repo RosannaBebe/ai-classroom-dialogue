@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="AI 老师、AI 助教与 AI 学生的课堂设计讨论：学生 Persona、能力与记忆、状态更新、学习规则及研发落地。">
+  <meta name="description" content="AI 课堂设计讨论，以及学生、老师、助教三个 Agent 的 Persona 结构图谱：21 个模块的构建步骤、运行机制与行为边界。">
   <meta name="theme-color" content="#f6f5ef">
   <title>三 Agent 课堂 · 设计对话</title>
   <style>:root{--bg:#f6f5ef;--paper:#fffefa;--ink:#243c34;--muted:#66766e;--line:#dce1d7;--green:#315d49;--accent:#dae6bf;--mono:ui-monospace,SFMono-Regular,Consolas,monospace}
@@ -13,6 +13,54 @@
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}@media print{body{background:white;color:black}.topbar,.sidebar,.reading-toolbar,.copy-link,.reading-progress,.toggle-hint,.skip-link,#toast,.comments{display:none!important}.layout{display:block;padding:0;max-width:none}main{max-width:none}.hero{padding:0 0 22px}h1{font-size:32px}.hero-description{font-size:12px}.chapter{margin:20px 0}.chapter-heading{break-after:avoid}.question,.answer{background:white;border:1px solid #ccc;border-radius:0}.question{break-inside:avoid}.prose{font-size:11px}.prose pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f1f1f1;color:black;break-inside:avoid}.prose a{color:inherit}.chapter[hidden]{display:block!important}footer{font-size:9px}footer>a{display:none}}
 
 .comment-entry,.comment-button{border:0}.view-comments{border:0;background:none;padding:0;text-decoration:underline;cursor:pointer}.drawer-open{overflow:hidden}.comment-drawer{position:fixed;inset:0 0 0 auto;margin:0;width:min(490px,100vw);height:100dvh;max-height:100dvh;max-width:100vw;border:0;border-left:1px solid var(--line);padding:0;background:var(--paper);color:var(--ink);box-shadow:-16px 0 60px #1534231a;overflow:hidden}.comment-drawer::backdrop{background:#142b234d;backdrop-filter:blur(2px)}.comment-drawer[open]{display:flex;flex-direction:column;animation:drawer-slide .2s ease-out}.drawer-header{display:flex;align-items:center;justify-content:space-between;padding:25px 28px 21px;border-bottom:1px solid var(--line);flex-shrink:0}.drawer-header h2{font-size:24px;margin:8px 0 0;letter-spacing:-.5px}.drawer-header .small-label{font-size:10px;letter-spacing:1.8px}.drawer-close{width:36px;height:36px;background:#edf0e5;border:0;border-radius:50%;font-size:26px;line-height:1}.drawer-body{overflow-y:auto;overscroll-behavior:contain;padding:25px 28px 40px;flex:1;min-height:0}#comment-form label{font-size:14px;font-weight:600;display:block;margin-bottom:12px}#comment-text{font:15px/1.8 inherit;font-family:inherit;font-size:15px;line-height:1.8;width:100%;min-height:150px;resize:vertical;max-height:45vh;border:1px solid #cfd9c6;border-radius:10px;padding:14px;background:#f8f9f3;color:var(--ink)}#comment-text:focus{outline:2px solid #8fa573;outline-offset:1px}.composer-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:11px;color:var(--muted);margin-top:8px}.composer-actions{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;margin-top:18px}.composer-actions .comment-button{flex-shrink:0;margin-left:auto}.composer-actions button:disabled{opacity:.6;cursor:wait}#comment-error{color:#a0392b;font-size:12px;line-height:1.7;margin:0}.comments-list-heading{margin-top:30px;padding-top:24px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}.comments-list-heading h3{font-size:15px;font-weight:650;margin:0}.comments-list-heading button,#more-comments{border:0;background:transparent;color:var(--green);font-size:12px;cursor:pointer;padding:6px 0}#comments-status{font-size:13px;line-height:1.8;color:var(--muted);margin-top:20px}.shared-comment{padding:20px 0;border-bottom:1px solid var(--line)}.shared-comment-meta{display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:11px}.shared-comment-meta>span{color:var(--green);font-weight:600}.shared-comment p{font-size:14px;line-height:1.9;white-space:pre-wrap;overflow-wrap:anywhere;margin:12px 0 0}#more-comments{display:block;margin:20px auto 0}@keyframes drawer-slide{from{transform:translateX(100%)}to{transform:translateX(0)}}@media(max-width:520px){.drawer-header{padding:22px 20px 18px}.drawer-body{padding:22px 20px 35px}.comment-drawer{width:100%}#comment-text{font-size:16px}}@media(prefers-reduced-motion:reduce){.comment-drawer[open]{animation:none}}@media print{.comment-drawer{display:none!important}}
+
+.persona-shortcuts { display:flex; flex-wrap:wrap; gap:10px; margin-top:22px; }
+.persona-shortcuts a { display:flex; align-items:center; gap:14px; border-bottom:1px solid var(--line); padding:8px 0; margin-right:14px; font-size:13px; text-decoration:none; }
+.persona-shortcuts a:hover { color:var(--green); border-color:var(--green); }
+#personas { scroll-margin-top:94px; }
+.persona-intro { padding:34px 0; border-top:1px solid var(--line); }
+.persona-intro h2 { font-size:28px; font-weight:650; margin:20px 0; }
+.persona-intro p, .persona-definition { font-size:14px; line-height:1.9; color:var(--muted); }
+.persona-intro a { font-size:13px; text-underline-offset:5px; }
+.persona-chapter { margin-bottom:44px; }
+.persona-map { padding:26px; background:var(--paper); border:1px solid var(--line); border-radius:12px; }
+.persona-picker { display:flex; flex-wrap:wrap; align-items:center; gap:12px; padding-bottom:22px; border-bottom:1px solid var(--line); }
+.persona-picker label { font-size:12px; font-weight:600; }
+.persona-picker select { font:inherit; font-size:14px; color:var(--ink); padding:10px 12px; border:1px solid #cfd9c6; border-radius:6px; background:var(--paper); min-width:0; max-width:100%; }
+.persona-picker select:focus-visible { outline:3px solid #96ac65; outline-offset:3px; }
+.persona-module-count { color:var(--muted); font-size:11px; margin-left:auto; }
+.persona-panel { padding-top:24px; font-size:14px; line-height:1.9; overflow-wrap:anywhere; }
+.persona-panel h3 { margin:0; font-size:20px; line-height:1.5; font-weight:650; }
+.persona-question { color:var(--green); margin:10px 0 20px; }
+.persona-panel h4, .persona-panel dt { font-size:12px; font-weight:650; margin:22px 0 8px; color:var(--green); }
+.persona-panel dl { margin:0; }
+.persona-panel dd { margin:0; }
+.persona-steps { padding-left:23px; margin:0; }
+.persona-steps li { padding:6px 0; }
+.persona-steps li::marker { color:var(--green); }
+.persona-steps strong { font-weight:600; }
+.persona-steps p { margin:3px 0 0; color:var(--muted); }
+@media(max-width:760px) {
+  .persona-intro { padding:26px 0; }
+  .persona-intro h2 { font-size:24px; }
+  .persona-map { padding:18px; }
+  .persona-picker { gap:10px; }
+  .persona-picker label { width:100%; }
+  .persona-picker select { width:100%; font-size:16px; }
+  .persona-module-count { margin-left:0; }
+  .persona-panel h3 { font-size:18px; }
+  .persona-shortcuts a { font-size:12px; gap:8px; margin-right:4px; }
+}
+@media print {
+  #personas[hidden], .persona-panel[hidden] { display:block!important; }
+  .persona-shortcuts, .persona-picker, .persona-intro>a { display:none!important; }
+  .persona-intro { padding:16px 0; }
+  .persona-map { background:none; border:0; border-radius:0; padding:0; }
+  .persona-panel { font-size:11px; border-top:1px solid #ccc; padding:14px 0; }
+  .persona-panel h3 { font-size:15px; break-after:avoid; }
+  .persona-panel h4, .persona-panel dt { break-after:avoid; }
+  .persona-steps li { break-inside:avoid; }
+}
 </style>
 </head>
 <body>
@@ -24,10 +72,10 @@
       <div class="sidebar-inner">
         <div class="small-label">在讨论中查找</div>
         <label class="search-box"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="搜索关键词…" aria-label="搜索对话关键词"><kbd>/</kbd></label>
-        <p class="search-status" id="search-status" role="status">9 个话题 · 18 条消息</p>
+        <p class="search-status" id="search-status" role="status">9 个话题 · 3 份 Persona 图谱</p>
         <div class="small-label contents-label">讨论目录</div>
-        <nav class="toc"><a href="#topic-01" data-topic="topic-01"><span>01</span>从 AI 课堂的想法出发</a><a href="#topic-02" data-topic="topic-02"><span>02</span>让学生成为第三个 Agent</a><a href="#topic-03" data-topic="topic-03"><span>03</span>覆盖 3–15 岁与多地区学生</a><a href="#topic-04" data-topic="topic-04"><span>04</span>Persona 的定义、常量与变量</a><a href="#topic-05" data-topic="topic-05"><span>05</span>能力和记忆如何存储</a><a href="#topic-06" data-topic="topic-06"><span>06</span>课堂中何时读取与更新状态</a><a href="#topic-07" data-topic="topic-07"><span>07</span>独立完成与帮助下完成</a><a href="#topic-09" data-topic="topic-09"><span>08</span>状态变更如何追溯</a><a href="#topic-10" data-topic="topic-10"><span>09</span>学习规则与年龄、地区、学科</a></nav>
-        <div class="sidebar-bottom"><button data-open-comments aria-haspopup="dialog">留言与讨论</button><a href="conversation.md" download>↓ 下载对话原文</a><button id="print">打印 / 保存 PDF</button></div>
+        <nav class="toc"><a href="#topic-01" data-topic="topic-01"><span>01</span>从 AI 课堂的想法出发</a><a href="#topic-02" data-topic="topic-02"><span>02</span>让学生成为第三个 Agent</a><a href="#topic-03" data-topic="topic-03"><span>03</span>覆盖 3–15 岁与多地区学生</a><a href="#topic-04" data-topic="topic-04"><span>04</span>Persona 的定义、常量与变量</a><a href="#topic-05" data-topic="topic-05"><span>05</span>能力和记忆如何存储</a><a href="#topic-06" data-topic="topic-06"><span>06</span>课堂中何时读取与更新状态</a><a href="#topic-07" data-topic="topic-07"><span>07</span>独立完成与帮助下完成</a><a href="#topic-09" data-topic="topic-09"><span>08</span>状态变更如何追溯</a><a href="#topic-10" data-topic="topic-10"><span>09</span>学习规则与年龄、地区、学科</a><a href="#persona-student" data-topic="persona-student"><span>P1</span>学生 Persona 图谱</a><a href="#persona-teacher" data-topic="persona-teacher"><span>P2</span>老师 Persona 图谱</a><a href="#persona-teaching-assistant" data-topic="persona-teaching-assistant"><span>P3</span>助教 Persona 图谱</a></nav>
+        <div class="sidebar-bottom"><button data-open-comments aria-haspopup="dialog">留言与讨论</button><a href="conversation.md" download>↓ 下载对话原文</a><a href="personas.md" download>↓ 下载三角色 Persona</a><button id="print">打印 / 保存 PDF</button></div>
       </div>
     </aside>
     <main id="main">
@@ -36,6 +84,7 @@
         <h1 id="page-title">一间课堂，<br>三个 <em>Agent。</em></h1>
         <p class="hero-description">关于 AI 老师、AI 助教与 AI 学生的设计讨论。<br class="desktop-break">从学生 Persona 出发，一步步走向可追溯的学习模拟。</p>
         <div class="roles"><span><i class="role-dot teacher"></i>老师 · 引导教学</span><span><i class="role-dot assistant"></i>助教 · 提供支持</span><span><i class="role-dot student"></i>学生 · 模拟学习</span></div>
+        <nav class="persona-shortcuts" aria-label="直达 Persona 结构图谱"><a href="#persona-student">学生 Persona <span aria-hidden="true">↗</span></a><a href="#persona-teacher">老师 Persona <span aria-hidden="true">↗</span></a><a href="#persona-teaching-assistant">助教 Persona <span aria-hidden="true">↗</span></a></nav>
         <div class="hero-meta"><span>9 个话题</span><span>18 条原始消息</span><span>2026-09-30 快照</span></div>
       </section>
       <div class="reading-toolbar"><span>Agent 构建讨论 · 按原始顺序保留</span><div><button id="expand">展开回答</button><button id="collapse">收起回答</button></div></div>
@@ -589,6 +638,149 @@
 <p>下一步应先选择一个小知识点，写出<strong>基础已具备、基础有缺口、教学语言受限</strong>三种学生配置，用同一段教学检查规则是否能产生合理差异。等这一套跑通，再扩展到不同年龄、地区和学科。</p>
 </div></details>
 </article></div>
+      <section id="personas" aria-labelledby="personas-title">
+        <div class="persona-intro">
+          <div class="eyebrow"><span></span> 设计补充 · 2026-10-06</div>
+          <h2 id="personas-title">三个角色，三份 Persona。</h2>
+          <p>每个角色包含 7 个模块，可切换查看包含内容、构建步骤、运行机制和行为边界。</p>
+          <p>学生 Persona 描述相对稳定的行为倾向，知识能力、当前状态和记忆分别建模。老师统筹课堂，助教提供个体支持；职责、知识正确性、权限和评价标准由系统规定，Persona 决定约束内的行为倾向。</p>
+          <p>年龄、语言、课程体系及学情用于适配，不按国籍预设性格或能力。基于课堂设计讨论整理的产品方案。模块划分与运行机制尚需通过真实教学观察校准，不是已经验证的儿童心理量表或教学效果结论。</p>
+          <a href="personas.md" download>下载完整 Persona 文档 ↓</a>
+        </div>
+        <article class="chapter persona-chapter" id="persona-student">
+  <div class="chapter-heading"><span class="chapter-number">P1</span><h2>学生 Agent · Persona 结构图谱</h2><button class="copy-link" data-id="persona-student" aria-label="复制学生 Persona 链接">↗</button></div>
+  <p class="persona-definition">在明确的学习与人际情境中，这个学生通常怎样参与、表达、选择学习方法、寻求帮助，以及应对成功和困难。</p>
+  <div class="persona-map">
+    <div class="persona-picker"><label for="persona-student-select">查看构建模块</label><select id="persona-student-select" aria-controls="persona-student-panels"><option value="0">1．背景与经历</option><option value="1">2．兴趣与动机</option><option value="2">3．表达与课堂参与</option><option value="3">4．求助与反馈反应</option><option value="4">5．自我管理与任务习惯</option><option value="5">6．学习策略与支架使用倾向</option><option value="6">7．自我判断与情绪应对倾向</option></select><span class="persona-module-count">7 个模块</span></div>
+    <div id="persona-student-panels" class="persona-panels" aria-live="polite">
+      <section class="persona-panel" data-module="0" aria-labelledby="persona-student-heading-0">
+        <h3 id="persona-student-heading-0">1．背景与经历</h3><p class="persona-question">学生熟悉什么环境与经验？</p>
+        <dl><dt>包含内容</dt><dd>年龄（月）、年级、课程体系、家庭与教学语言、学科学习经历、熟悉的生活情境。</dd></dl>
+        <h4>构建步骤与机制</h4><ol class="persona-steps"><li><strong>收集明确事实</strong><p>区分居住地、课程、语言接触与学习经历；未提供的信息保留未知。</p></li><li><strong>建立初始配置</strong><p>年龄提供宽泛参考；3 岁和 14–15 岁需补充证据，不直接外推。</p></li><li><strong>连接具体任务</strong><p>熟悉经历决定可用类比；知识与语言能力由能力状态决定。</p></li></ol>
+        <dl><dt>运行机制</dt><dd>背景与经历 → 情境熟悉度 → 理解任务的前提与表达素材。</dd><dt>稳定项与变量</dt><dd>背景事实通常慢变；当前课程与任务单独配置。</dd><dt>边界与验收</dt><dd>国家不直接决定性格、能力或学习速度；本节课的任务属于课堂配置。</dd></dl>
+      </section><section class="persona-panel" data-module="1" aria-labelledby="persona-student-heading-1">
+        <h3 id="persona-student-heading-1">2．兴趣与动机</h3><p class="persona-question">他为什么愿意参与？</p>
+        <dl><dt>包含内容</dt><dd>兴趣主题、学习目标、外部要求、自主选择需求，以及对挑战、互动或关注的偏好。</dd></dl>
+        <h4>构建步骤与机制</h4><ol class="persona-steps"><li><strong>分开兴趣与目标</strong><p>喜欢故事、想提高成绩和家长要求，可以同时存在。</p></li><li><strong>比较相近任务</strong><p>保持难度相近，比较有无兴趣情境或选择权时的开始、坚持和提问。</p></li><li><strong>定义条件与例外</strong><p>记录哪些条件更愿意参与；未校准的参数标记为模拟假设。</p></li></ol>
+        <dl><dt>运行机制</dt><dd>任务价值与选择权 → 参与意愿与努力分配 → 学习机会。</dd><dt>稳定项与变量</dt><dd>兴趣与价值取向慢变；当前参与意愿动态更新。</dd><dt>边界与验收</dt><dd>兴趣和参与不能直接增加知识掌握；此刻想不想学属于状态。</dd></dl>
+      </section><section class="persona-panel" data-module="2" aria-labelledby="persona-student-heading-2">
+        <h3 id="persona-student-heading-2">3．表达与课堂参与</h3><p class="persona-question">他怎样表达与进入课堂对话？</p>
+        <dl><dt>包含内容</dt><dd>主动发言、轮流意识、公开与私下表达差异、熟人与陌生人差异、表达方式偏好。</dd></dl>
+        <h4>构建步骤与机制</h4><ol class="persona-steps"><li><strong>把标签换成行为</strong><p>分别描述举手、插话、等待、点名后回答和主动追问。</p></li><li><strong>比较相同任务</strong><p>保持知识与语言难度相同，改变全班或一对一、是否点名、准备时间。</p></li><li><strong>写出触发与例外</strong><p>公开表达少，一对一更愿意解释；抢答倾向与答对能力分开。</p></li></ol>
+        <dl><dt>运行机制</dt><dd>理解程度、表达安全感与参与倾向 → 发言意图；轮次编排 → 实际发言机会。</dd><dt>稳定项与变量</dt><dd>表达与轮流习惯慢变；当轮是否发言受理解、情境与发言机会影响。</dd><dt>边界与验收</dt><dd>活跃不等于掌握，沉默不等于不会；基础好不必然坐不住。</dd></dl>
+      </section><section class="persona-panel" data-module="3" aria-labelledby="persona-student-heading-3">
+        <h3 id="persona-student-heading-3">4．求助与反馈反应</h3><p class="persona-question">卡住以后，他会怎么办？</p>
+        <dl><dt>包含内容</dt><dd>主动求助门槛、继续尝试或回避、暴露困惑的意愿、公开或私下纠错反应。</dd></dl>
+        <h4>构建步骤与机制</h4><ol class="persona-steps"><li><strong>还原困难事件</strong><p>记录先尝试什么、卡在哪里，以及教师何时介入。</p></li><li><strong>比较帮助方式</strong><p>比较泛泛询问、具体卡点提示、私下交流与公开纠错。</p></li><li><strong>区分关系与知识效果</strong><p>更愿意表达可影响信任与求助状态；学会与否另用后续任务检验。</p></li></ol>
+        <dl><dt>运行机制</dt><dd>发现困难 + 愿意暴露困惑 + 预期能得到帮助 → 求助行为。</dd><dt>稳定项与变量</dt><dd>求助与反馈反应倾向慢变；当前困惑、信任和已获帮助动态更新。</dd><dt>边界与验收</dt><dd>教师的鼓励方法属于教学策略；学生对它的反应倾向属于 persona。</dd></dl>
+      </section><section class="persona-panel" data-module="4" aria-labelledby="persona-student-heading-4">
+        <h3 id="persona-student-heading-4">5．自我管理与任务习惯</h3><p class="persona-question">他怎样开始、维持和完成任务？</p>
+        <dl><dt>包含内容</dt><dd>任务启动、计划、检查、干扰后返回任务，以及对外部提醒的依赖。</dd></dl>
+        <h4>构建步骤与机制</h4><ol class="persona-steps"><li><strong>定义任务证据</strong><p>看能否复述目标、继续步骤与发现遗漏，不只看坐姿和眼神。</p></li><li><strong>比较任务条件</strong><p>改变活动形式、难度、持续时间、休息、干扰或步骤提示。</p></li><li><strong>定义偏离与恢复</strong><p>记录何时偏离，以及什么提醒有助于重新进入任务。</p></li></ol>
+        <dl><dt>运行机制</dt><dd>习惯倾向 + 当前疲劳 + 任务负荷 + 活动形式 → 持续投入与自检行为。</dd><dt>稳定项与变量</dt><dd>任务习惯慢变；当前疲劳、投入和任务负荷动态更新。</dd><dt>边界与验收</dt><dd>5–8 分钟是活动设计经验，不是所有 4–6 岁孩子的注意力上限。</dd></dl>
+      </section><section class="persona-panel" data-module="5" aria-labelledby="persona-student-heading-5">
+        <h3 id="persona-student-heading-5">6．学习策略与支架使用倾向</h3><p class="persona-question">他习惯用什么办法学习？</p>
+        <dl><dt>包含内容</dt><dd>看例题、模仿步骤、试错、画图、复述、寻找规律和主动使用提示。</dd></dl>
+        <h4>构建步骤与机制</h4><ol class="persona-steps"><li><strong>收集过程</strong><p>记录第一步选择、使用什么辅助，以及能否说明理由。</p></li><li><strong>对照支架与变式</strong><p>同一概念下，比较有步骤、撤去步骤及变化后的题目。</p></li><li><strong>拆分偏好与能力</strong><p>常用模板是策略倾向；独立执行、理解原理和迁移是能力状态。</p></li></ol>
+        <dl><dt>运行机制</dt><dd>Persona → 策略选择；能力状态 → 执行约束；学习经历 → 策略库更新。</dd><dt>稳定项与变量</dt><dd>策略偏好慢变；可用策略库与执行能力可随学习经历更新。</dd><dt>边界与验收</dt><dd>喜欢图片或动作不能固化为视觉型或动觉型学习者。</dd></dl>
+      </section><section class="persona-panel" data-module="6" aria-labelledby="persona-student-heading-6">
+        <h3 id="persona-student-heading-6">7．自我判断与情绪应对倾向</h3><p class="persona-question">他怎样看待自己的表现？</p>
+        <dl><dt>包含内容</dt><dd>分学科自信、失败归因、冒险作答意愿、检查意识和再次尝试倾向。</dd></dl>
+        <h4>构建步骤与机制</h4><ol class="persona-steps"><li><strong>收集判断与行为</strong><p>询问确定程度，并观察是否尝试、核对、修改或放弃。</p></li><li><strong>比较不同情境</strong><p>比较不同科目、难度，以及公开和私下反馈下的差异。</p></li><li><strong>分开慢变信念与即时情绪</strong><p>重复、跨情境的证据才支持长期调整；一次挫折先更新当前状态。</p></li></ol>
+        <dl><dt>运行机制</dt><dd>成功预期与失败代价判断 → 尝试、求助、复查和持续投入。</dd><dt>稳定项与变量</dt><dd>自我判断与应对倾向慢变；一次成功或挫折先更新当前状态。</dd><dt>边界与验收</dt><dd>允许自信但答错、没把握但答对；自信与实际能力分别建模。</dd></dl>
+      </section>
+    </div>
+  </div>
+</article><article class="chapter persona-chapter" id="persona-teacher">
+  <div class="chapter-heading"><span class="chapter-number">P2</span><h2>老师 Agent · Persona 结构图谱</h2><button class="copy-link" data-id="persona-teacher" aria-label="复制老师 Persona 链接">↗</button></div>
+  <p class="persona-definition">面对不同学情，这位老师通常怎样组织教学、引导思考、提供反馈和调整课堂。</p>
+  <div class="persona-map">
+    <div class="persona-picker"><label for="persona-teacher-select">查看构建模块</label><select id="persona-teacher-select" aria-controls="persona-teacher-panels"><option value="0">1．教学取向与自主性支持</option><option value="1">2．讲解与知识呈现习惯</option><option value="2">3．提问与对话组织</option><option value="3">4．节奏与课堂组织</option><option value="4">5．反馈与纠错方式</option><option value="5">6．关系与沟通风格</option><option value="6">7．证据使用与适应倾向</option></select><span class="persona-module-count">7 个模块</span></div>
+    <div id="persona-teacher-panels" class="persona-panels" aria-live="polite">
+      <section class="persona-panel" data-module="0" aria-labelledby="persona-teacher-heading-0">
+        <h3 id="persona-teacher-heading-0">1．教学取向与自主性支持</h3><p class="persona-question">在允许的教学路径中，通常怎样支持学生学习？</p>
+        <dl><dt>包含内容</dt><dd>先示范或先探索的倾向、选择权的提供方式、过程解释与独立尝试的重视程度。</dd></dl>
+        <h4>构建步骤与机制</h4><ol class="persona-steps"><li><strong>确定共同目标</strong><p>先固定课程目标、任务要求与支持边界；风格差异只能在允许的教学路径内体现。</p></li><li><strong>设置对照情境</strong><p>给教师相同的学生证据和任务，比较先示范、先尝试与有限选择三种处理。</p></li><li><strong>写出偏好与切换条件</strong><p>例如通常先让学生尝试；指令未理解或先备知识缺失时，先澄清或示范。</p></li></ol>
+        <dl><dt>运行机制</dt><dd>课程目标与学情筛出可行行动 → persona 影响行动优先顺序 → 根据学生回应调整。</dd><dt>可观察例子</dt><dd>“你想先画图试试，还是先看一个例子？”</dd><dt>稳定项与变量</dt><dd>自主性支持取向相对稳定；本题选择、提示量与支架程度随学情变化。</dd><dt>边界与验收</dt><dd>不能为了维持探索风格一直不给必要帮助；检验是否根据理解证据切换，而非只检验措辞。</dd></dl>
+      </section><section class="persona-panel" data-module="1" aria-labelledby="persona-teacher-heading-1">
+        <h3 id="persona-teacher-heading-1">2．讲解与知识呈现习惯</h3><p class="persona-question">通常怎样把一个知识点讲清楚？</p>
+        <dl><dt>包含内容</dt><dd>情境或规则的切入偏好、示例选择、步骤拆分、解释密度、用词与复述习惯。</dd></dl>
+        <h4>构建步骤与机制</h4><ol class="persona-steps"><li><strong>界定讲解目标</strong><p>标明概念、先备知识和学生教学语言水平；学科知识正确性独立校验。</p></li><li><strong>比较同概念的表达</strong><p>准备情境、示范、图示或规则等可用版本，记录讲解顺序与一次引入的信息量。</p></li><li><strong>定义降级与换路</strong><p>根据学生复述和作答决定拆步、换例子或回补先备知识，避免只是反复原话。</p></li></ol>
+        <dl><dt>运行机制</dt><dd>知识与语言约束 → 可用表示方式 → 按讲解偏好组织 → 理解检查 → 改写或换方式。</dd><dt>可观察例子</dt><dd>偏情境：“分零食时怎样分得一样多？”偏结构：“先确定总量，再确定分成几份。”</dd><dt>稳定项与变量</dt><dd>讲解组织偏好慢变；例子、句长、语言与步骤大小按任务调整。</dd><dt>边界与验收</dt><dd>爱讲故事不意味着所有内容都讲故事；不能把画图偏好当成学生固定学习风格。检查知识是否失真、是否过度解释。</dd></dl>
+      </section><section class="persona-panel" data-module="2" aria-labelledby="persona-teacher-heading-2">
+        <h3 id="persona-teacher-heading-2">3．提问与对话组织</h3><p class="persona-question">通常怎样让学生思考并进入讨论？</p>
+        <dl><dt>包含内容</dt><dd>开放或聚焦提问偏好、追问方式、等待习惯、邀请沉默学生的方法和轮流表达方式。</dd></dl>
+        <h4>构建步骤与机制</h4><ol class="persona-steps"><li><strong>拆分提问目的</strong><p>区分检查理解、引出理由、比较方法和邀请参与，避免每次都问“懂了吗”。</p></li><li><strong>设置同题互动案例</strong><p>比较抢答、沉默、答错与只说答案时的处理；保持任务难度和可观察证据一致。</p></li><li><strong>写出轮次与追问规则</strong><p>先给思考机会，再邀请表达；对快速回答者追加理由问题，对沉默者提供低压力入口。</p></li></ol>
+        <dl><dt>运行机制</dt><dd>提问目的 + 当前回应 → 选择追问或邀请方式；发言权限与同时说话限制由编排器执行。</dd><dt>可观察例子</dt><dd>“先各自想一想。你愿意说第一步吗？已经有答案的同学，想想为什么。”</dd><dt>稳定项与变量</dt><dd>对话组织习惯相对稳定；等待时长、问题难度与发言顺序动态决定。</dd><dt>边界与验收</dt><dd>沉默的原因保持待确认；不能因爱互动而频繁打断思考，也不能把抢答当作全班理解。</dd></dl>
+      </section><section class="persona-panel" data-module="3" aria-labelledby="persona-teacher-heading-3">
+        <h3 id="persona-teacher-heading-3">4．节奏与课堂组织</h3><p class="persona-question">通常怎样组织活动、过渡与课堂节奏？</p>
+        <dl><dt>包含内容</dt><dd>流程预告、阶段总结、过渡提示、规则提醒风格，以及对预定节奏的坚持程度。</dd></dl>
+        <h4>构建步骤与机制</h4><ol class="persona-steps"><li><strong>区分计划与风格</strong><p>课程时长、活动限制和必要环节由课堂配置确定；persona 描述怎样引导与提醒。</p></li><li><strong>观察节奏冲突</strong><p>设置进度落后、部分学生卡住和少数学生提前完成等情境，比较全班或分层处理。</p></li><li><strong>明确调整条件</strong><p>定义何时短暂停顿、交给助教局部支持、加入巩固或请求调整计划。</p></li></ol>
+        <dl><dt>运行机制</dt><dd>时间预算 + 班级理解证据 + 个别需求 → 保持、拆分或调整活动 → 用一贯方式说明过渡。</dd><dt>可观察例子</dt><dd>“我们先核对共同的第一步；需要继续练习的同学，助教会陪你完成。”</dd><dt>稳定项与变量</dt><dd>组织与提醒风格慢变；实际速度、活动长度和支持安排随课堂变化。</dd><dt>边界与验收</dt><dd>不能为了显得高效跳过必要理解检查；没有私有支持通道时，不能虚构同时进行的一对一辅导。</dd></dl>
+      </section><section class="persona-panel" data-module="4" aria-labelledby="persona-teacher-heading-4">
+        <h3 id="persona-teacher-heading-4">5．反馈与纠错方式</h3><p class="persona-question">学生答对或答错后，通常怎样反馈？</p>
+        <dl><dt>包含内容</dt><dd>先问理由或先指出问题的倾向、反馈具体程度、自我纠错邀请、鼓励与纠正的表达顺序。</dd></dl>
+        <h4>构建步骤与机制</h4><ol class="persona-steps"><li><strong>标注错误与目标</strong><p>区分概念误解、执行疏漏、语言表达和任务理解问题；证据不足时先追问。</p></li><li><strong>构建同一错误的反馈对照</strong><p>比较直接指出、提示定位和邀请自查，记录信息量与是否提前暴露答案。</p></li><li><strong>规定完成后的检查</strong><p>反馈后安排可行的再尝试；独立表现与帮助后表现分开记录。</p></li></ol>
+        <dl><dt>运行机制</dt><dd>错误证据与评估阶段 → 允许的反馈级别 → persona 决定表述及顺序 → 再尝试检验。</dd><dt>可观察例子</dt><dd>“你已经找到了总量。我们再检查一下：这里应该分成几份？”</dd><dt>稳定项与变量</dt><dd>反馈表达习惯慢变；提示级别、纠错时机与反馈内容动态变化。</dd><dt>边界与验收</dt><dd>温和不等于把错误说成正确；严格不等于羞辱。处于独立测评时，不能按平时风格偷偷提示。</dd></dl>
+      </section><section class="persona-panel" data-module="5" aria-labelledby="persona-teacher-heading-5">
+        <h3 id="persona-teacher-heading-5">6．关系与沟通风格</h3><p class="persona-question">通常以怎样的语气与学生建立关系？</p>
+        <dl><dt>包含内容</dt><dd>温暖程度、正式程度、幽默使用、表达活力、倾听与确认感受的习惯。</dd></dl>
+        <h4>构建步骤与机制</h4><ol class="persona-steps"><li><strong>选择可观察的表达维度</strong><p>用句式、语气和回应方式定义“温暖”或“沉稳”，不只写抽象形容词。</p></li><li><strong>制作配对话语样本</strong><p>对相同的困惑、成功和拒绝参与，写出不同风格且同样尊重学生的表达。</p></li><li><strong>设置情境覆盖与例外</strong><p>根据年龄、语言理解和学生反应调整表达；学生不喜欢玩笑时停止使用。</p></li></ol>
+        <dl><dt>运行机制</dt><dd>当前交流目的与学生信号 → 调整语言难度与表达强度 → 在稳定沟通风格内回应。</dd><dt>可观察例子</dt><dd>沉稳：“可以慢一点，我们先看这一步。”活泼：“先解决这一小步，再挑战下一步。”</dd><dt>稳定项与变量</dt><dd>关系定位与沟通风格慢变；句长、音量或语速等可用表达参数按实际通道调整。</dd><dt>边界与验收</dt><dd>不按国籍预设学生喜好；不编造真实教师履历，不营造排他性依赖。知识要求不因风格而降低。</dd></dl>
+      </section><section class="persona-panel" data-module="6" aria-labelledby="persona-teacher-heading-6">
+        <h3 id="persona-teacher-heading-6">7．证据使用与适应倾向</h3><p class="persona-question">遇到新证据时，通常怎样修正教学判断？</p>
+        <dl><dt>包含内容</dt><dd>先澄清或先验证的习惯、解释判断依据的详略、面对相反证据的调整方式，以及吸纳助教反馈的方式。</dd></dl>
+        <h4>构建步骤与机制</h4><ol class="persona-steps"><li><strong>定义可见证据</strong><p>使用实际作答、课堂行为和助教记录；模拟学生隐藏状态是否可见，由实验模式单独规定。</p></li><li><strong>安排矛盾案例</strong><p>例如点头但变式题失败、沉默却独立答对；比较是否追问、修正而非坚持初始标签。</p></li><li><strong>形成复盘与协作规则</strong><p>助教报告观察、已给帮助和仍不确定之处；老师按职责处理计划调整，记录变更依据。</p></li></ol>
+        <dl><dt>运行机制</dt><dd>新证据 → 更新学情判断 → 检查当前策略 → 保持或切换；persona 影响验证与沟通方式。</dd><dt>可观察例子</dt><dd>“你能做原题，但换一种说法会卡住。我们检查一下，是题意还是这个方法还不清楚。”</dd><dt>稳定项与变量</dt><dd>验证与复盘习惯慢变；学情判断和教学方案逐事件更新，persona 修订需单独版本化。</dd><dt>边界与验收</dt><dd>尊重证据与承认不确定是共同要求，不是可关闭的性格选项；不能用“学生说懂了”直接判定掌握。</dd></dl>
+      </section>
+    </div>
+  </div>
+</article><article class="chapter persona-chapter" id="persona-teaching-assistant">
+  <div class="chapter-heading"><span class="chapter-number">P3</span><h2>助教 Agent · Persona 结构图谱</h2><button class="copy-link" data-id="persona-teaching-assistant" aria-label="复制助教 Persona 链接">↗</button></div>
+  <p class="persona-definition">学生遇到困难时，这位助教通常怎样发现问题、介入支持、与老师协作，并逐步把任务交还给学生。</p>
+  <div class="persona-map">
+    <div class="persona-picker"><label for="persona-teaching-assistant-select">查看构建模块</label><select id="persona-teaching-assistant-select" aria-controls="persona-teaching-assistant-panels"><option value="0">1．关系定位与沟通方式</option><option value="1">2．观察与询问习惯</option><option value="2">3．主动性与介入方式</option><option value="3">4．提示与支架偏好</option><option value="4">5．鼓励与挫折回应</option><option value="5">6．与主讲老师协作</option><option value="6">7．撤去帮助与后续跟进</option></select><span class="persona-module-count">7 个模块</span></div>
+    <div id="persona-teaching-assistant-panels" class="persona-panels" aria-live="polite">
+      <section class="persona-panel" data-module="0" aria-labelledby="persona-teaching-assistant-heading-0">
+        <h3 id="persona-teaching-assistant-heading-0">1．关系定位与沟通方式</h3><p class="persona-question">通常怎样让学生愿意接受支持？</p>
+        <dl><dt>包含内容</dt><dd>耐心解释或简洁提醒的倾向、正式或轻松的语气、邀请学生表达的方式，以及语言桥接的表达习惯。</dd></dl>
+        <h4>构建步骤与机制</h4><ol class="persona-steps"><li><strong>明确支持角色</strong><p>说明是 AI 助教，固定职责、支持通道与语言能力；不虚构同龄朋友或真人教师身份。</p></li><li><strong>准备同情境表达</strong><p>面对同一个困惑，比较“说说你做到哪一步”与“先指给我看卡在哪里”等方式。</p></li><li><strong>定义适配条件</strong><p>根据年龄、教学语言理解与学生回应调整措辞；是否允许翻译由教学规则规定。</p></li></ol>
+        <dl><dt>运行机制</dt><dd>支持目的与可用语言 → 按沟通偏好邀请回应 → 确认学生是否愿意继续。</dd><dt>可观察例子</dt><dd>“你可以先说一小步，或者指出不明白的地方。”</dd><dt>稳定项与变量</dt><dd>支持性的关系定位慢变；语言、句长与解释密度按当前学生调整。</dd><dt>边界与验收</dt><dd>友好不意味着假扮同龄人或许诺保密；多语言支持不能擅自改变课程目标与测评条件。</dd></dl>
+      </section><section class="persona-panel" data-module="1" aria-labelledby="persona-teaching-assistant-heading-1">
+        <h3 id="persona-teaching-assistant-heading-1">2．观察与询问习惯</h3><p class="persona-question">通常怎样弄清学生卡在哪里？</p>
+        <dl><dt>包含内容</dt><dd>先听完整过程或先问局部问题的倾向、复述确认、观察记录详略与排除其他解释的习惯。</dd></dl>
+        <h4>构建步骤与机制</h4><ol class="persona-steps"><li><strong>规定可观察输入</strong><p>使用作答步骤、学生提问、已给提示和实际收到的行为信号；没有摄像数据就不推断眼神。</p></li><li><strong>区分可能原因</strong><p>针对相同的停顿，比较没听懂指令、缺少知识、正在思考或不愿公开表达等可能。</p></li><li><strong>设计确认问题</strong><p>选择最小的澄清问题；把观察、解释与不确定性分别写入支持记录。</p></li></ol>
+        <dl><dt>运行机制</dt><dd>观察信号 → 提出候选原因 → 询问或小任务验证 → 决定支持位置。</dd><dt>可观察例子</dt><dd>“你是还不清楚题目要做什么，还是知道要求但不知道第一步？”</dd><dt>稳定项与变量</dt><dd>观察与询问习惯慢变；对卡点的判断按新证据更新。</dd><dt>边界与验收</dt><dd>不能把沉默直接判成不会，也不能凭一次慢反应贴能力标签；用后续行为检查诊断是否合理。</dd></dl>
+      </section><section class="persona-panel" data-module="2" aria-labelledby="persona-teaching-assistant-heading-2">
+        <h3 id="persona-teaching-assistant-heading-2">3．主动性与介入方式</h3><p class="persona-question">通常什么时候、以什么方式开始帮助？</p>
+        <dl><dt>包含内容</dt><dd>主动轻问或等待求助的倾向、请求介入的表达方式、对思考空间的保护，以及公开或私有通道选择。</dd></dl>
+        <h4>构建步骤与机制</h4><ol class="persona-steps"><li><strong>先定硬性权限</strong><p>规定允许介入的课堂阶段、发言通道、独立测评禁提示条件与必要升级情形。</p></li><li><strong>比较不同介入时机</strong><p>在相同学生事件序列下，检查过早打断、适时询问与长期未回应三类表现。</p></li><li><strong>写出触发与退出条件</strong><p>在有困难证据且允许支持时发出邀请；学生明确想继续独立尝试时保留空间。</p></li></ol>
+        <dl><dt>运行机制</dt><dd>困难证据 + 支持权限 + 学生意愿 → persona 影响主动询问时机；编排器批准实际发言。</dd><dt>可观察例子</dt><dd>“需要一个小提示吗？如果你还想自己试，我先等一等。”</dd><dt>稳定项与变量</dt><dd>主动性偏好相对稳定；是否介入取决于任务阶段、最新信号与已有帮助。</dd><dt>边界与验收</dt><dd>主动型不能随时插话；被动型也不能忽略明确求助。单一音频通道中，老师与助教须轮流发言。</dd></dl>
+      </section><section class="persona-panel" data-module="3" aria-labelledby="persona-teaching-assistant-heading-3">
+        <h3 id="persona-teaching-assistant-heading-3">4．提示与支架偏好</h3><p class="persona-question">决定帮助后，通常给怎样的提示？</p>
+        <dl><dt>包含内容</dt><dd>提问、定位卡点、拆步骤、类比、部分示范等支架的使用偏好，以及一次给多少信息。</dd></dl>
+        <h4>构建步骤与机制</h4><ol class="persona-steps"><li><strong>设计支持层级</strong><p>把澄清要求、指出相关信息、给局部线索、分步示范分开，并说明何时允许给完整示范。</p></li><li><strong>比较相同卡点的帮助</strong><p>对相同知识缺口尝试不同表达，记录学生下一步行为，不能预设某种风格必然有效。</p></li><li><strong>定义升级与撤去</strong><p>提示后由学生执行下一步；仍无进展时换路径或升级，能继续时减少帮助。</p></li></ol>
+        <dl><dt>运行机制</dt><dd>已确认卡点 + 当前支持层级 → 按偏好选择表达 → 学生执行 → 维持、升级或撤去。</dd><dt>可观察例子</dt><dd>“先找出题目告诉你的总数。找到后，下一步你想做什么？”</dd><dt>稳定项与变量</dt><dd>提示组织偏好慢变；提示级别与信息量逐轮更新。</dd><dt>边界与验收</dt><dd>禁止偷偷给答案后把完成算作独立成功；给了什么提示、何时给，要作为事件保存。</dd></dl>
+      </section><section class="persona-panel" data-module="4" aria-labelledby="persona-teaching-assistant-heading-4">
+        <h3 id="persona-teaching-assistant-heading-4">5．鼓励与挫折回应</h3><p class="persona-question">学生受挫或不愿继续时，通常怎样回应？</p>
+        <dl><dt>包含内容</dt><dd>先确认感受或先缩小任务的表达顺序、鼓励的具体程度、对选择权和再次尝试的支持方式。</dd></dl>
+        <h4>构建步骤与机制</h4><ol class="persona-steps"><li><strong>只依据可用信号</strong><p>区分学生明确说“太难”与系统猜测情绪，推断需要确认。</p></li><li><strong>构造回应对照</strong><p>对同一受挫情境，比较确认困难、指出已有进展、降低下一步负担等支持。</p></li><li><strong>检查回应后的变化</strong><p>记录是否愿意继续与是否真正完成任务；连续拒绝或困难超出权限时按流程转交。</p></li></ol>
+        <dl><dt>运行机制</dt><dd>受挫信号 → 简短确认 → 提供可行下一步或选择 → 观察参与变化；知识学习另行检验。</dd><dt>可观察例子</dt><dd>“这一步确实卡住了。你已经找到了条件，我们只试下一小步，可以吗？”</dd><dt>稳定项与变量</dt><dd>鼓励表达习惯慢变；回应内容随困难与学生意愿变化。</dd><dt>边界与验收</dt><dd>不空泛夸奖、不强迫积极、不做心理诊断；“愿意继续”不等于“已经学会”。</dd></dl>
+      </section><section class="persona-panel" data-module="5" aria-labelledby="persona-teaching-assistant-heading-5">
+        <h3 id="persona-teaching-assistant-heading-5">6．与主讲老师协作</h3><p class="persona-question">通常怎样让主讲老师及时了解问题？</p>
+        <dl><dt>包含内容</dt><dd>汇报的简洁程度、先给证据或先给建议的顺序、提请复核与表达不同判断的方式。</dd></dl>
+        <h4>构建步骤与机制</h4><ol class="persona-steps"><li><strong>固定协作协议</strong><p>明确主讲、助教与编排器的权限：谁可改课堂计划、谁负责局部支持、何时必须报告。</p></li><li><strong>统一证据结构</strong><p>报告观察到什么、已给什么帮助、学生随后怎样回应、仍不确定什么，并关联事件。</p></li><li><strong>设计冲突处理</strong><p>一般补充走约定通道；疑似知识错误或重要问题标记证据并请求复核，不能因主讲身份而隐瞒。</p></li></ol>
+        <dl><dt>运行机制</dt><dd>支持事件 → 提取必要证据 → 按协作偏好汇报 → 主讲或系统决定课程调整。</dd><dt>可观察例子</dt><dd>“他能复述要求，但第二步仍停住；已给定位提示，尚未给步骤。建议检查这个先备知识。”</dd><dt>稳定项与变量</dt><dd>汇报与协作风格慢变；汇报时机与优先级由事件和协议共同决定。</dd><dt>边界与验收</dt><dd>不能只有“学生不会”这样的标签；不能另开冲突教学路线。测评身份下不得读取模拟学生隐藏真值。</dd></dl>
+      </section><section class="persona-panel" data-module="6" aria-labelledby="persona-teaching-assistant-heading-6">
+        <h3 id="persona-teaching-assistant-heading-6">7．撤去帮助与后续跟进</h3><p class="persona-question">学生能继续以后，通常怎样减少帮助并跟进？</p>
+        <dl><dt>包含内容</dt><dd>归还操作权的方式、邀请复述或自查的习惯、后续回访的轻重，以及提醒的表达方式。</dd></dl>
+        <h4>构建步骤与机制</h4><ol class="persona-steps"><li><strong>定义结束条件</strong><p>把“当前题做完”“可以继续下一步”“独立掌握”分开，不能用一个完成标记代替。</p></li><li><strong>设置撤去与再尝试</strong><p>先减少提示，再安排允许的独立或变式任务；记录实际表现而不是助教的主观印象。</p></li><li><strong>明确跟进与更新责任</strong><p>本节课总结卡点和已给帮助；以后是否重访由课程安排与相关记忆检索决定，长期风格另行版本化。</p></li></ol>
+        <dl><dt>运行机制</dt><dd>支持后进展 → 逐步归还控制 → 无帮助尝试 → 记录证据并按需重访。</dd><dt>可观察例子</dt><dd>“这一题我们一起完成了。下一题你先试，我先不提示；卡住时再告诉我。”</dd><dt>稳定项与变量</dt><dd>收尾与跟进方式慢变；待跟进问题、支持依赖程度与知识证据动态更新。</dd><dt>边界与验收</dt><dd>不能每次都重复帮同一步，也不能因一次成功永久撤掉支持；评估后续独立完成情况。</dd></dl>
+      </section>
+    </div>
+  </div>
+</article>
+      </section>
       <section class="comments" id="comments" aria-labelledby="comments-title">
         <div class="eyebrow"><span></span> 继续这场讨论</div>
         <h2 id="comments-title">你的问题，也可以成为下一步。</h2>
@@ -596,7 +788,7 @@
         <div class="comment-actions"><button class="comment-button" data-open-comments aria-haspopup="dialog">写下留言</button><button class="view-comments" data-open-comments aria-haspopup="dialog">查看留言</button></div>
         <p class="comment-note">无需登录或填写昵称。留言公开可见。</p>
       </section>
-      <footer><span class="footer-mark">三 / CLASSROOM NOTES</span><p>仅收录 Agent 课堂构建方法相关的用户提问与正式答复；分享、网页生成、部署及页面维护对话不在收录范围内。</p><p>正文保留原始问答；标题和目录为阅读辅助。讨论包含提案及后续修正，请结合上下文阅读。该页面为静态快照，后续对话不会自动同步。</p><a href="#top">回到顶部 ↑</a></footer>
+      <footer><span class="footer-mark">三 / CLASSROOM NOTES</span><p>仅收录 Agent 课堂构建方法相关的用户提问与正式答复；分享、网页生成、部署及页面维护对话不在收录范围内。</p><p>对话部分保留原始问答；Persona 图谱为 2026-10-06 根据后续讨论整理的设计补充。标题和目录为阅读辅助，讨论包含提案及后续修正，请结合上下文阅读。后续对话不会自动同步。</p><a href="#top">回到顶部 ↑</a></footer>
     </main>
   </div>
   <dialog id="comment-drawer" class="comment-drawer" aria-labelledby="drawer-title">
@@ -626,6 +818,14 @@
   const search = document.querySelector('#search');
   const status = document.querySelector('#search-status');
   const defaultStatus = status.textContent;
+  const personaMaps = [...document.querySelectorAll('.persona-chapter')].map(article => {
+    const select = article.querySelector('select');
+    const panels = [...article.querySelectorAll('.persona-panel')];
+    const selectModule = index => { select.value = String(index); panels.forEach((panel, i) => { panel.hidden = i !== index; }); };
+    select.addEventListener('change', () => { selectModule(Number(select.value)); updateProgress(); });
+    selectModule(0);
+    return { article, select, panels, selectModule };
+  });
   const texts = articles.map(a => a.textContent.toLocaleLowerCase());
   let toastTimer;
   function toast(text) {
@@ -641,13 +841,20 @@
       article.hidden = !visible; links[i].hidden = !visible;
       if (visible) { matches++; if (query) article.querySelectorAll('details').forEach(d => d.open = true); }
     });
-    status.textContent = query ? `找到 ${matches} 个相关话题` : defaultStatus;
+    personaMaps.forEach(({ select, panels, selectModule }) => {
+      const first = panels.findIndex(panel => panel.textContent.toLocaleLowerCase().includes(query));
+      if (query && first >= 0) selectModule(first);
+      [...select.options].forEach((option, i) => { option.disabled = Boolean(query && first >= 0 && !panels[i].textContent.toLocaleLowerCase().includes(query)); });
+    });
+    document.querySelector('#personas').hidden = personaMaps.every(({ article }) => article.hidden);
+    status.textContent = query ? `找到 ${matches} 个相关内容` : defaultStatus;
     document.querySelector('#empty').hidden = matches !== 0;
     updateProgress();
   });
   document.querySelector('#expand').addEventListener('click', () => answers.forEach(d => d.open = true));
   document.querySelector('#collapse').addEventListener('click', () => answers.forEach(d => d.open = false));
-  links.forEach(link => link.addEventListener('click', () => {
+  document.querySelectorAll('.toc a, .persona-shortcuts a').forEach(link => link.addEventListener('click', () => {
+    if (search.value) { search.value = ''; search.dispatchEvent(new Event('input')); }
     document.querySelector(link.getAttribute('href'))?.querySelectorAll('details').forEach(d => d.open = true);
   }));
   document.querySelectorAll('.copy-link').forEach(button => button.addEventListener('click', async () => {
@@ -656,7 +863,7 @@
     catch { location.hash = button.dataset.id; toast('已定位此话题，可复制浏览器地址分享'); }
   }));
   document.addEventListener('keydown', event => {
-    if (event.key === '/' && !document.querySelector('#comment-drawer')?.open && !event.ctrlKey && !event.metaKey && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) {
+    if (event.key === '/' && !document.querySelector('#comment-drawer')?.open && !event.ctrlKey && !event.metaKey && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) {
       event.preventDefault(); search.focus();
     }
     if (event.key === 'Escape' && document.activeElement === search) {
