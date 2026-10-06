@@ -27,7 +27,8 @@ const chapters = data.chapters.map((c, i) => `<article class="chapter" id="${c.i
 const replacements = {
   TITLE: escape(data.title), DATE: escape(data.date), NAV: nav, CHAPTERS: chapters,
   MESSAGE_COUNT: String(messageCount), TOPIC_COUNT: String(data.chapters.length),
-  CSS: read('styles.css'), JS: read('client.js'), SCOPE: escape(data.scope)
+  CSS: read('styles.css'), JS: read('client.js'), SCOPE: escape(data.scope),
+  COMMENT_CONFIG: read('comments-config.json').replaceAll('<', '\\u003c')
 };
 const html = read('template.html').replace(/\{\{([A-Z_]+)\}\}/g, (_, key) => replacements[key] ?? '');
 fs.writeFileSync(new URL('index.html', root), html);

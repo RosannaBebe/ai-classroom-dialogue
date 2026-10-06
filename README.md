@@ -10,12 +10,15 @@ AI 老师、AI 助教与 AI 学生课堂的产品与研发讨论记录。
 
 ## 文件
 
-网页顶部和底部均提供留言入口，指向[专用留言讨论帖](https://github.com/RosannaBebe/ai-classroom-dialogue/issues/1)。访客登录 GitHub 后可发表评论和回复；评论公开可见，保存在 GitHub Issues 中。
+网页顶部和底部均提供右侧匿名留言抽屉，访客不需要填写昵称或登录。留言通过 Sites 托管的独立后端共享保存，所有访客均可阅读；`comments-config.json` 的 `endpoint` 指向已部署的 `/api/comments` 地址。每条留言最多 2000 字，同一网络每分钟最多发布 5 条。
 
-- `index.html`：无需网络依赖的完整静态页面，可直接打开。
+站点所有者可在[留言管理页面](https://ai-classroom-comments.rosannabebe.chatgpt.site/admin)使用独立管理密钥删除留言、暂停新留言或导出记录。管理密钥不得提交到本仓库。
+
+- `index.html`：包含完整对话的静态页面，可离线阅读；共享留言需要通过线上网页联网使用。
 - `conversation.md`：可下载的 Markdown 对话原文。
 - `conversation.json`：用于生成网页的对话数据。
 - `template.html`、`styles.css`、`client.js`、`build.mjs`：页面生成源码。
+- `comments-config.json`：公开留言接口地址，不得放置任何密钥。
 
 ## 更新与构建
 
