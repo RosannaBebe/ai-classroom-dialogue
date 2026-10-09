@@ -40,7 +40,7 @@
   });
   document.querySelector('#expand').addEventListener('click', () => answers.forEach(d => d.open = true));
   document.querySelector('#collapse').addEventListener('click', () => answers.forEach(d => d.open = false));
-  document.querySelectorAll('.toc a, .persona-shortcuts a').forEach(link => link.addEventListener('click', () => {
+  document.querySelectorAll('.toc a, .persona-shortcuts a, .memory-shortcuts a[href^="#"]').forEach(link => link.addEventListener('click', () => {
     if (search.value) { search.value = ''; search.dispatchEvent(new Event('input')); }
     document.querySelector(link.getAttribute('href'))?.querySelectorAll('details').forEach(d => d.open = true);
   }));

@@ -11,19 +11,25 @@ const escape = s => s.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAl
 // Render text and code as text; allow only ordinary web citations as Markdown links.
 marked.use({ renderer: {
   html({ text }) { return escape(text); },
+  code({ text, lang }) {
+    if (lang !== 'mermaid' || !/^flowchart TD\n(?:\s+\w+(?:\[[^\]\n]+\])? --> \w+(?:\[[^\]\n]+\])?\n?)+$/.test(text)) return false;
+    const steps = [...text.matchAll(/\w+\[([^\]]+)\]/g)].map(match => match[1]);
+    return `<figure class="memory-flow"><figcaption>记忆的形成、使用与更新</figcaption><ol>${steps.map(step => `<li>${escape(step)}</li>`).join('')}</ol><p>生成行为后产生新的课堂事件，流程继续循环。</p></figure>`;
+  },
   link({ href, tokens }) {
     const label = this.parser.parseInline(tokens);
     if (!/^https?:\/\//i.test(href)) return label;
     return `<a href="${escape(href)}" target="_blank" rel="noopener noreferrer">${label}</a>`;
   }
 }});
+const renderProse = text => marked.parse(text).replaceAll('<table>', '<div class="table-scroll" role="region" aria-label="记忆类型对照表" tabindex="0"><table>').replaceAll('</table>', '</table></div>');
 const messageCount = data.chapters.reduce((n, c) => n + c.messages.length, 0);
 const nav = data.chapters.map((c, i) => `<a href="#${c.id}" data-topic="${c.id}"><span>${String(i + 1).padStart(2, '0')}</span>${escape(c.title)}</a>`).join('');
 const chapters = data.chapters.map((c, i) => `<article class="chapter" id="${c.id}">
   <div class="chapter-heading"><span class="chapter-number">${String(i + 1).padStart(2, '0')}</span><h2>${escape(c.title)}</h2><button class="copy-link" data-id="${c.id}" aria-label="复制话题链接：${escape(c.title)}" title="复制此话题链接">↗</button></div>
   ${c.messages.map(m => m.role === 'user'
-    ? `<div class="question"><div class="speaker">用户 · 提问</div><div class="prose">${marked.parse(m.text)}</div></div>`
-    : `<details class="answer" open><summary><span class="speaker">AI · 回答</span><span class="toggle-hint">展开 / 收起</span></summary><div class="prose">${marked.parse(m.text)}</div></details>`).join('')}
+    ? `<div class="question"><div class="speaker">用户 · 提问</div><div class="prose">${renderProse(m.text)}</div></div>`
+    : `<details class="answer" open><summary><span class="speaker">AI · 回答</span><span class="toggle-hint">展开 / 收起</span></summary><div class="prose">${renderProse(m.text)}</div></details>`).join('')}
 </article>`).join('');
 const personaNav = personas.roles.map((role, i) => `<a href="#${role.id}" data-topic="${role.id}"><span>P${i + 1}</span>${escape(role.label)} Persona 图谱</a>`).join('');
 const personaLinks = personas.roles.map(role => `<a href="#${role.id}">${escape(role.label)} Persona <span aria-hidden="true">↗</span></a>`).join('');
@@ -44,7 +50,7 @@ const personaArticles = personas.roles.map((role, index) => `<article class="cha
   </div>
 </article>`).join('');
 const replacements = {
-  TITLE: escape(data.title), DATE: escape(data.date), NAV: nav + personaNav, CHAPTERS: chapters,
+  TITLE: escape(data.title), DATE: escape(data.date), UPDATED: escape(data.updated || data.date), NAV: nav + personaNav, CHAPTERS: chapters,
   PERSONAS: personaArticles, PERSONA_LINKS: personaLinks, PERSONA_DATE: escape(personas.updated), PERSONA_NOTE: escape(personas.note),
   MESSAGE_COUNT: String(messageCount), TOPIC_COUNT: String(data.chapters.length),
   CSS: read('styles.css') + '\n' + read('personas.css'), JS: read('client.js'), SCOPE: escape(data.scope),
@@ -52,14 +58,14 @@ const replacements = {
 };
 const html = read('template.html').replace(/\{\{([A-Z_]+)\}\}/g, (_, key) => replacements[key] ?? '');
 fs.writeFileSync(new URL('index.html', root), html);
-const markdown = [`# ${data.title}`, `日期：${data.date}`, data.scope];
+const markdown = [`# ${data.title}`, `讨论开始：${data.date}；更新至：${data.updated || data.date}`, data.scope];
 for (const chapter of data.chapters) {
   markdown.push(`## ${chapter.title}`);
   for (const message of chapter.messages) {
     markdown.push(`### ${message.role === 'user' ? '用户' : 'AI'}`, message.text);
   }
 }
-fs.writeFileSync(new URL('conversation.md', root), markdown.join('\n\n') + '\n');
+fs.writeFileSync(new URL('conversation.md', root), markdown.join('\n\n').replace(/ {2,}\n/g, '\\\n') + '\n');
 const personaMarkdown = ['# 学生、老师与助教 · Persona 结构图谱', `更新日期：${personas.updated}`, personas.note,
   '学生 persona 描述条件明确、相对稳定的行为倾向；知识能力、当前状态和记忆分别建模。老师统筹课堂，助教提供个体支持；角色职责、知识正确性、权限和评价标准由系统规定，persona 描述约束内的行为倾向。年龄、语言、课程体系及学情用于适配，不按国籍预设性格或能力。'];
 for (const role of personas.roles) {

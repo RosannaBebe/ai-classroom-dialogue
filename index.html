@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="AI 课堂设计讨论，以及学生、老师、助教三个 Agent 的 Persona 结构图谱：21 个模块的构建步骤、运行机制与行为边界。">
+  <meta name="description" content="AI 课堂设计讨论：三角色 Persona 图谱，以及 Memory 机制、1v1 课堂存档、上下文预算、记忆分类与 LangChain 官方文档笔记。">
   <meta name="theme-color" content="#f6f5ef">
   <title>三 Agent 课堂 · 设计对话</title>
   <style>:root{--bg:#f6f5ef;--paper:#fffefa;--ink:#243c34;--muted:#66766e;--line:#dce1d7;--green:#315d49;--accent:#dae6bf;--mono:ui-monospace,SFMono-Regular,Consolas,monospace}
@@ -13,6 +13,8 @@
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}@media print{body{background:white;color:black}.topbar,.sidebar,.reading-toolbar,.copy-link,.reading-progress,.toggle-hint,.skip-link,#toast,.comments{display:none!important}.layout{display:block;padding:0;max-width:none}main{max-width:none}.hero{padding:0 0 22px}h1{font-size:32px}.hero-description{font-size:12px}.chapter{margin:20px 0}.chapter-heading{break-after:avoid}.question,.answer{background:white;border:1px solid #ccc;border-radius:0}.question{break-inside:avoid}.prose{font-size:11px}.prose pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f1f1f1;color:black;break-inside:avoid}.prose a{color:inherit}.chapter[hidden]{display:block!important}footer{font-size:9px}footer>a{display:none}}
 
 .comment-entry,.comment-button{border:0}.view-comments{border:0;background:none;padding:0;text-decoration:underline;cursor:pointer}.drawer-open{overflow:hidden}.comment-drawer{position:fixed;inset:0 0 0 auto;margin:0;width:min(490px,100vw);height:100dvh;max-height:100dvh;max-width:100vw;border:0;border-left:1px solid var(--line);padding:0;background:var(--paper);color:var(--ink);box-shadow:-16px 0 60px #1534231a;overflow:hidden}.comment-drawer::backdrop{background:#142b234d;backdrop-filter:blur(2px)}.comment-drawer[open]{display:flex;flex-direction:column;animation:drawer-slide .2s ease-out}.drawer-header{display:flex;align-items:center;justify-content:space-between;padding:25px 28px 21px;border-bottom:1px solid var(--line);flex-shrink:0}.drawer-header h2{font-size:24px;margin:8px 0 0;letter-spacing:-.5px}.drawer-header .small-label{font-size:10px;letter-spacing:1.8px}.drawer-close{width:36px;height:36px;background:#edf0e5;border:0;border-radius:50%;font-size:26px;line-height:1}.drawer-body{overflow-y:auto;overscroll-behavior:contain;padding:25px 28px 40px;flex:1;min-height:0}#comment-form label{font-size:14px;font-weight:600;display:block;margin-bottom:12px}#comment-text{font:15px/1.8 inherit;font-family:inherit;font-size:15px;line-height:1.8;width:100%;min-height:150px;resize:vertical;max-height:45vh;border:1px solid #cfd9c6;border-radius:10px;padding:14px;background:#f8f9f3;color:var(--ink)}#comment-text:focus{outline:2px solid #8fa573;outline-offset:1px}.composer-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:11px;color:var(--muted);margin-top:8px}.composer-actions{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;margin-top:18px}.composer-actions .comment-button{flex-shrink:0;margin-left:auto}.composer-actions button:disabled{opacity:.6;cursor:wait}#comment-error{color:#a0392b;font-size:12px;line-height:1.7;margin:0}.comments-list-heading{margin-top:30px;padding-top:24px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}.comments-list-heading h3{font-size:15px;font-weight:650;margin:0}.comments-list-heading button,#more-comments{border:0;background:transparent;color:var(--green);font-size:12px;cursor:pointer;padding:6px 0}#comments-status{font-size:13px;line-height:1.8;color:var(--muted);margin-top:20px}.shared-comment{padding:20px 0;border-bottom:1px solid var(--line)}.shared-comment-meta{display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:11px}.shared-comment-meta>span{color:var(--green);font-weight:600}.shared-comment p{font-size:14px;line-height:1.9;white-space:pre-wrap;overflow-wrap:anywhere;margin:12px 0 0}#more-comments{display:block;margin:20px auto 0}@keyframes drawer-slide{from{transform:translateX(100%)}to{transform:translateX(0)}}@media(max-width:520px){.drawer-header{padding:22px 20px 18px}.drawer-body{padding:22px 20px 35px}.comment-drawer{width:100%}#comment-text{font-size:16px}}@media(prefers-reduced-motion:reduce){.comment-drawer[open]{animation:none}}@media print{.comment-drawer{display:none!important}}
+/* Memory discussions and responsive reference tables. */
+.memory-intro{margin:28px 0 0;padding:23px;border:1px solid var(--line);border-radius:12px;background:#eef1e5}.memory-intro h2{font-size:21px;line-height:1.5;margin:13px 0 9px}.memory-intro p{font-size:13px;line-height:1.9;margin:0;color:var(--muted)}.memory-shortcuts{display:flex;gap:12px 20px;flex-wrap:wrap;margin-top:17px}.memory-shortcuts a{font-size:12px;line-height:1.7;text-underline-offset:4px;color:var(--green)}.table-scroll{max-width:100%;overflow-x:auto;margin:20px 0}.prose table{width:100%;border-collapse:collapse;font-size:13px;line-height:1.8}.prose th,.prose td{padding:12px;text-align:left;vertical-align:top;border:1px solid var(--line);min-width:100px}.prose th{background:#e9eedf;color:var(--ink);font-weight:650}.prose tbody tr:nth-child(even){background:#f6f7f1}.memory-flow{margin:22px 0;padding:20px;border:1px solid var(--line);border-radius:10px;background:#f6f7f1}.memory-flow figcaption{font-weight:650;color:var(--ink);margin-bottom:14px}.memory-flow ol{display:grid;grid-template-columns:1fr 1fr;gap:12px 28px;padding-left:24px}.memory-flow li{padding:8px 10px;margin:0;background:white;border:1px solid var(--line);border-radius:6px}.memory-flow li::marker{color:var(--green);font-weight:650}.memory-flow p{font-size:12px;color:var(--muted);margin-bottom:0}@media(max-width:520px){.memory-intro{padding:18px}.memory-intro h2{font-size:19px}.memory-flow{padding:15px}.memory-flow ol{grid-template-columns:1fr}.prose th,.prose td{padding:9px;min-width:85px}}@media print{.memory-intro{background:white;break-inside:avoid}.table-scroll{overflow:visible}.prose th,.prose td{min-width:0;padding:6px}.prose table{font-size:10px;table-layout:fixed}.memory-flow{break-inside:avoid}}
 
 .persona-shortcuts { display:flex; flex-wrap:wrap; gap:10px; margin-top:22px; }
 .persona-shortcuts a { display:flex; align-items:center; gap:14px; border-bottom:1px solid var(--line); padding:8px 0; margin-right:14px; font-size:13px; text-decoration:none; }
@@ -66,15 +68,15 @@
 <body>
   <div class="reading-progress" aria-hidden="true"></div>
   <a class="skip-link" href="#main">跳到对话正文</a>
-  <header class="topbar"><a class="brand" href="#top"><span class="brand-icon">三</span> CLASSROOM NOTES</a><span class="edition">设计讨论 · 2026-09-30</span><button class="comment-entry" data-open-comments aria-haspopup="dialog">留言讨论</button><a class="source" href="https://github.com/RosannaBebe/ai-classroom-dialogue" target="_blank" rel="noopener noreferrer">GitHub ↗</a></header>
+  <header class="topbar"><a class="brand" href="#top"><span class="brand-icon">三</span> CLASSROOM NOTES</a><span class="edition">更新至 · 2026-10-09</span><button class="comment-entry" data-open-comments aria-haspopup="dialog">留言讨论</button><a class="source" href="https://github.com/RosannaBebe/ai-classroom-dialogue" target="_blank" rel="noopener noreferrer">GitHub ↗</a></header>
   <div class="layout" id="top">
     <aside class="sidebar" aria-label="阅读工具和话题目录">
       <div class="sidebar-inner">
         <div class="small-label">在讨论中查找</div>
         <label class="search-box"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="搜索关键词…" aria-label="搜索对话关键词"><kbd>/</kbd></label>
-        <p class="search-status" id="search-status" role="status">9 个话题 · 3 份 Persona 图谱</p>
+        <p class="search-status" id="search-status" role="status">15 个话题 · 3 份 Persona 图谱</p>
         <div class="small-label contents-label">讨论目录</div>
-        <nav class="toc"><a href="#topic-01" data-topic="topic-01"><span>01</span>从 AI 课堂的想法出发</a><a href="#topic-02" data-topic="topic-02"><span>02</span>让学生成为第三个 Agent</a><a href="#topic-03" data-topic="topic-03"><span>03</span>覆盖 3–15 岁与多地区学生</a><a href="#topic-04" data-topic="topic-04"><span>04</span>Persona 的定义、常量与变量</a><a href="#topic-05" data-topic="topic-05"><span>05</span>能力和记忆如何存储</a><a href="#topic-06" data-topic="topic-06"><span>06</span>课堂中何时读取与更新状态</a><a href="#topic-07" data-topic="topic-07"><span>07</span>独立完成与帮助下完成</a><a href="#topic-09" data-topic="topic-09"><span>08</span>状态变更如何追溯</a><a href="#topic-10" data-topic="topic-10"><span>09</span>学习规则与年龄、地区、学科</a><a href="#persona-student" data-topic="persona-student"><span>P1</span>学生 Persona 图谱</a><a href="#persona-teacher" data-topic="persona-teacher"><span>P2</span>老师 Persona 图谱</a><a href="#persona-teaching-assistant" data-topic="persona-teaching-assistant"><span>P3</span>助教 Persona 图谱</a></nav>
+        <nav class="toc"><a href="#topic-01" data-topic="topic-01"><span>01</span>从 AI 课堂的想法出发</a><a href="#topic-02" data-topic="topic-02"><span>02</span>让学生成为第三个 Agent</a><a href="#topic-03" data-topic="topic-03"><span>03</span>覆盖 3–15 岁与多地区学生</a><a href="#topic-04" data-topic="topic-04"><span>04</span>Persona 的定义、常量与变量</a><a href="#topic-05" data-topic="topic-05"><span>05</span>能力和记忆如何存储</a><a href="#topic-06" data-topic="topic-06"><span>06</span>课堂中何时读取与更新状态</a><a href="#topic-07" data-topic="topic-07"><span>07</span>独立完成与帮助下完成</a><a href="#topic-09" data-topic="topic-09"><span>08</span>状态变更如何追溯</a><a href="#topic-10" data-topic="topic-10"><span>09</span>学习规则与年龄、地区、学科</a><a href="#memory-01" data-topic="memory-01"><span>10</span>Memory 的定义与运行机制</a><a href="#memory-02" data-topic="memory-02"><span>11</span>学生记忆：一本经历小本子</a><a href="#memory-03" data-topic="memory-03"><span>12</span>1v1 课堂：State、Thread 与 Checkpoint</a><a href="#memory-04" data-topic="memory-04"><span>13</span>单次调用的上下文预算</a><a href="#memory-05" data-topic="memory-05"><span>14</span>语义、情景与程序性记忆</a><a href="#memory-06" data-topic="memory-06"><span>15</span>LangChain 官方记忆文档学习笔记</a><a href="#persona-student" data-topic="persona-student"><span>P1</span>学生 Persona 图谱</a><a href="#persona-teacher" data-topic="persona-teacher"><span>P2</span>老师 Persona 图谱</a><a href="#persona-teaching-assistant" data-topic="persona-teaching-assistant"><span>P3</span>助教 Persona 图谱</a></nav>
         <div class="sidebar-bottom"><button data-open-comments aria-haspopup="dialog">留言与讨论</button><a href="conversation.md" download>↓ 下载对话原文</a><a href="personas.md" download>↓ 下载三角色 Persona</a><button id="print">打印 / 保存 PDF</button></div>
       </div>
     </aside>
@@ -85,7 +87,13 @@
         <p class="hero-description">关于 AI 老师、AI 助教与 AI 学生的设计讨论。<br class="desktop-break">从学生 Persona 出发，一步步走向可追溯的学习模拟。</p>
         <div class="roles"><span><i class="role-dot teacher"></i>老师 · 引导教学</span><span><i class="role-dot assistant"></i>助教 · 提供支持</span><span><i class="role-dot student"></i>学生 · 模拟学习</span></div>
         <nav class="persona-shortcuts" aria-label="直达 Persona 结构图谱"><a href="#persona-student">学生 Persona <span aria-hidden="true">↗</span></a><a href="#persona-teacher">老师 Persona <span aria-hidden="true">↗</span></a><a href="#persona-teaching-assistant">助教 Persona <span aria-hidden="true">↗</span></a></nav>
-        <div class="hero-meta"><span>9 个话题</span><span>18 条原始消息</span><span>2026-09-30 快照</span></div>
+        <aside class="memory-intro" aria-label="Memory 新增讨论">
+          <div class="eyebrow"><span></span> 新增讨论 · 2026-10-09</div>
+          <h2>让经历延续到下一次课堂。</h2>
+          <p>6 组 Memory 问答：记忆存什么、何时读写、1v1 课堂如何恢复进度，以及怎样选择本次调用的上下文。</p>
+          <nav class="memory-shortcuts" aria-label="直达 Memory 内容"><a href="#memory-01">阅读 Memory 讨论 ↗</a><a href="#memory-06">查看官方文档笔记 ↗</a><a href="https://docs.langchain.com/oss/python/concepts/memory" target="_blank" rel="noopener noreferrer">LangChain 官方原文 ↗</a></nav>
+        </aside>
+        <div class="hero-meta"><span>15 个话题</span><span>30 条原始消息</span><span>2026-10-09 快照</span></div>
       </section>
       <div class="reading-toolbar"><span>Agent 构建讨论 · 按原始顺序保留</span><div><button id="expand">展开回答</button><button id="collapse">收起回答</button></div></div>
       <p id="empty" hidden>没有找到相关话题。试试“记忆”“学习规则”或“独立完成”。</p>
@@ -637,6 +645,642 @@
 </blockquote>
 <p>下一步应先选择一个小知识点，写出<strong>基础已具备、基础有缺口、教学语言受限</strong>三种学生配置，用同一段教学检查规则是否能产生合理差异。等这一套跑通，再扩展到不同年龄、地区和学科。</p>
 </div></details>
+</article><article class="chapter" id="memory-01">
+  <div class="chapter-heading"><span class="chapter-number">10</span><h2>Memory 的定义与运行机制</h2><button class="copy-link" data-id="memory-01" aria-label="复制话题链接：Memory 的定义与运行机制" title="复制此话题链接">↗</button></div>
+  <div class="question"><div class="speaker">用户 · 提问</div><div class="prose"><p>我有一个关于memory的问题：</p>
+<p>在之前，你梳理过：具体研发上，我建议：<strong>把学生的能力、记忆保存到我们自己的数据库里，由程序负责读取和更新；大模型负责根据这些信息生成学生行为。</strong></p>
+<p>这里的“学习”首先体现为数据库中的学生状态发生变化，<strong>不涉及每上完一节课就训练或修改大模型参数</strong>。第一版可以用这种方式实现。</p>
+<p>我用“学生学会数学进位”这个例子展开。</p>
+<p><strong>1. 把 persona、能力、记忆分别存储，用同一个学生 ID 关联。</strong></p>
+<p>研发可以先建立以下几类数据，初期放在同一个数据库即可，不需要拆成多个服务。</p>
+<ul>
+<li><code>student_profiles</code>：学生背景和相对稳定的 persona。</li>
+<li><code>student_skill_states</code>：按知识点保存的能力状态。</li>
+<li><code>student_memories</code>：课堂中发生过的、值得后续使用的经历。</li>
+<li><code>classroom_events</code>：完整的课堂事件记录，便于回放和核查。</li>
+</ul>
+<p><strong>这两条数据表达不同的东西：能力说明“现在能做到什么”，记忆说明“之前经历过什么”</strong></p>
+<p>这里里面，记忆memory具体指的是什么？这个memory机制应该怎么设计？</p>
+</div></div><details class="answer" open><summary><span class="speaker">AI · 回答</span><span class="toggle-hint">展开 / 收起</span></summary><div class="prose"><p>这里的 <strong>memory，可以理解为“这个学生能够带到下一次互动中的经历与信息”</strong>。</p>
+<p>但我需要先补充之前的表述：从广义的 Agent 设计来说，persona、知识、技能、经历都可以属于长期记忆系统。我之前把它们分开存储，是为了让研发明确各自的更新规则，避免混在一段文字里。</p>
+<p>在我们这套设计里，可以约定：</p>
+<blockquote>
+<p><strong><code>student_memories</code> 保存有来源、与这个学生有关、以后可能影响其行为的经历与信息；“现在掌握到什么程度”仍由 <code>student_skill_states</code> 管理。</strong></p>
+</blockquote>
+<p>这是一种产品与数据结构的划分，不是在完整模拟人脑。</p>
+<p><strong>一、先用“数学进位”区分四种信息</strong></p>
+<p>假设学生做 <code>27 + 15</code>，先答成 <code>32</code>。老师提醒：“个位满十，十位还要加上进来的 1。”学生随后改成 <code>42</code>。</p>
+<p>同一段课堂过程，在系统里应该产生不同记录：</p>
+<ul>
+<li>**课堂事件：**题目是什么、学生答了什么、老师给了什么提示、学生怎样修改。这是原始记录。</li>
+<li><strong>学生记忆：</strong>“我之前做过一道类似的题，漏加了进到十位的 1；老师提醒后，我改对了。”</li>
+<li>**能力状态：**这次在提示下完成；能否独立进位、能否迁移到另一道题，仍需进一步检验。</li>
+<li>**当前状态：**例如学生明确表示“原来是这样”，或者愿意继续尝试。是否改变信心，需要按另一个规则判断。</li>
+</ul>
+<p><strong>记忆保存经历的内容，能力状态保存对当前能力的描述。两者有关联，但不能互相替代。</strong></p>
+<p>尤其不能把这段经历压缩成：</p>
+<blockquote>
+<p>“学生已经掌握两位数进位加法。”</p>
+</blockquote>
+<p>这样一条不准确的记忆，被下节课重新放进提示词后，就可能让学生突然表现得什么都会。</p>
+<p><strong>二、你的学生 Agent，第一版需要记住哪些东西？</strong></p>
+<p>建议先做四类，先不追求复杂的“人类记忆分类”。</p>
+<p><strong>1．学习经历</strong></p>
+<p>记录具体学过、做过、错过或成功过的事情。</p>
+<p>例如：</p>
+<blockquote>
+<p>做过 <code>27 + 15</code>；最初漏加进位；在明确提示后完成。</p>
+</blockquote>
+<p>它用于让学生表现出经历连续性：再次遇到相似问题时，可以有熟悉感，或者提到上次的错误。</p>
+<p>不能直接据此认定其他题型也会做。</p>
+<p><strong>2．接触过的讲解、例子与方法</strong></p>
+<p>记录老师实际向这个学生展示过什么，以及学生当时有什么可观察的回应。</p>
+<p>例如：</p>
+<blockquote>
+<p>老师用“十根小棒换成一捆”解释过进位；学生能跟着操作，但尚未独立解释。</p>
+</blockquote>
+<p>这里要分别记录：</p>
+<ul>
+<li>是否接触过；</li>
+<li>当时能否复述或跟做；</li>
+<li>是否有后续独立使用的证据。</li>
+</ul>
+<p><strong>“听过这个方法”不能自动变成“能熟练使用这个方法”。</strong></p>
+<p><strong>3．互动与关系经历</strong></p>
+<p>记录和老师、助教发生过的具体互动。</p>
+<p>例如：</p>
+<blockquote>
+<p>在全班提问时没有回应；助教单独询问具体卡点后，学生说出了困惑。</p>
+</blockquote>
+<p>以后遇到相似互动时，这段经历可以影响是否愿意回应、向谁求助。</p>
+<p>但一次这样的经历，不能直接把 persona 改成“永远只愿意和助教说话”，也不能擅自推断学生的内心感受。</p>
+<p><strong>4．未完成的问题与约定</strong></p>
+<p>记录需要保持连续性的事情。</p>
+<p>例如：</p>
+<blockquote>
+<p>学生问过“为什么不能把 12 全写在个位？”老师表示下一次用小棒演示，但尚未演示。</p>
+</blockquote>
+<p>下一次课堂可以继续这个问题。完成后，将它标记为已解决，避免每节课重复询问。</p>
+<p>这类记忆对产品体验很重要：它让 Agent 不会忘记刚刚答应过什么，也不会无限重复已经解决的问题。</p>
+<p><strong>三、还需要区分“课堂中的临时上下文”和“跨课堂记忆”</strong></p>
+<p>这两个东西用途不同。</p>
+<p><strong>课堂中的临时上下文</strong>包括：当前是哪道题、轮到谁说话、学生刚才做到了哪一步、刚刚获得了什么帮助。它需要及时更新，否则助教可能重复提示，或者把提示后的答案误判成独立作答。</p>
+<p><strong>跨课堂记忆</strong>则是上面四类需要长期保留的内容。不是每一句话都值得进入这里。</p>
+<p>这种按会话内与跨会话区分记忆的方式，也是现有 Agent 框架采用的一种工程划分。<a href="https://docs.langchain.com/oss/python/concepts/memory" target="_blank" rel="noopener noreferrer">LangChain 官方记忆文档</a></p>
+<p>所以，研发侧可以这样理解：</p>
+<blockquote>
+<p>课堂事件记录完整过程；临时上下文支撑眼前这一步；长期记忆支撑下一次相关互动。</p>
+</blockquote>
+<p>即使都保存在同一个数据库中，也应该区分用途。</p>
+<p><strong>四、memory 机制需要设计一条完整的“形成—使用—更新”流程</strong></p>
+<figure class="memory-flow"><figcaption>记忆的形成、使用与更新</figcaption><ol><li>课堂事件：学生实际经历了什么</li><li>保存原始事件</li><li>筛选值得保留的信息</li><li>生成记忆候选并核查来源</li><li>写入或修订长期记忆</li><li>遇到相关任务时检索</li><li>决定本次允许回想什么</li><li>结合能力、Persona和当前状态生成行为</li></ol><p>生成行为后产生新的课堂事件，流程继续循环。</p></figure><p>其中有六个设计点。</p>
+<p><strong>第一步：先记录事件，再判断是否值得形成记忆。</strong></p>
+<p>建议在这些情况下形成记忆候选：</p>
+<ul>
+<li>出现了新的错误、解释或解决方法；</li>
+<li>学生获得了重要提示，并产生后续回应；</li>
+<li>完成了一段值得后续引用的互动；</li>
+<li>出现了未解决的问题或明确约定。</li>
+</ul>
+<p>“你好”“请继续”之类通常留在事件记录里即可，不必各自生成长期记忆。</p>
+<p>筛选标准可以写成：</p>
+<blockquote>
+<p><strong>这条信息，是否可能改变下一次相关情境下的合理行为？</strong></p>
+</blockquote>
+<p><strong>第二步：让大模型提取候选，程序控制正式写入。</strong></p>
+<p>模型可以负责把一段事件整理成结构化候选，但不能毫无约束地“自由总结这个学生”。</p>
+<p>程序至少检查：</p>
+<ul>
+<li>引用的事件是否存在；</li>
+<li>是否属于同一个学生、同一次模拟运行；</li>
+<li>学生是否实际收到过这段讲解；</li>
+<li>是否把教师推测写成学生事实；</li>
+<li>是否遗漏了帮助条件；</li>
+<li>是否重复保存了同一件事。</li>
+</ul>
+<p>需要注意，字段格式正确并不代表内容正确。因此，能从事件中直接取得的题目、答案、提示类型，应尽量由程序填写；模型主要负责受约束的文字整理。</p>
+<p><strong>第三步：写入时保留来源、范围和版本。</strong></p>
+<p>一条记忆不能只有一句摘要。至少应该知道：</p>
+<ul>
+<li>属于哪个学生、哪次课堂或模拟运行；</li>
+<li>涉及哪个知识点、哪道题或哪位互动对象；</li>
+<li>经历是什么；</li>
+<li>当时获得了什么帮助，随后表现怎样；</li>
+<li>依据哪些原始事件；</li>
+<li>是观察事实、学生明确表述，还是待验证的推断；</li>
+<li>是否有效、已解决或被修订；</li>
+<li>由哪个版本的规则生成。</li>
+</ul>
+<p>保留事件再生成可查询记录，有助于后续核查与重建；第一版可以借鉴这一原则，不必一开始就搭建完整的事件溯源架构。<a href="https://learn.microsoft.com/en-us/azure/architecture/patterns/event-sourcing" target="_blank" rel="noopener noreferrer">Microsoft：事件溯源模式</a></p>
+<p><strong>第四步：按需要读取，而不是每次塞进全部记忆。</strong></p>
+<p>建议几个明确触发点：</p>
+<ul>
+<li>**开课时：**读取相关未完成事项、必要的近期经历。</li>
+<li>**切换知识点时：**读取该知识点相关的学习经历。</li>
+<li>**出现卡点时：**读取过去遇到的类似问题、已接触过的支持方式。</li>
+<li>**学生提到“上次”时：**查找对应事件或互动。</li>
+<li>**每次生成回应时：**使用最新的临时上下文；长期记忆检索可以复用有效缓存，不必每轮全库搜索。</li>
+</ul>
+<p>第一版可以先按学生、模拟运行、知识点、事件类型、时间进行查询。数据规模和跨情境查找需求增加后，再考虑语义检索，不需要一开始就依赖向量数据库。</p>
+<p><strong>第五步：数据库查到，不等于学生完整想起来。</strong></p>
+<p>这是模拟学生与普通知识问答 Agent 的重要区别。</p>
+<p>系统可能找到完整记录：</p>
+<blockquote>
+<p>老师完整讲解过进位步骤，并展示了正确答案。</p>
+</blockquote>
+<p>但模拟学生本次可能只允许回想：</p>
+<blockquote>
+<p>“我记得上次有一个小小的 1，要加到另一边……”</p>
+</blockquote>
+<p>甚至只是觉得这道题熟悉，却想不起具体步骤。</p>
+<p>因此，最好分成两层：</p>
+<ol>
+<li>**系统检索：**找到了哪些历史记录？</li>
+<li>**模拟回想：**按照当前能力和回想规则，这次能使用其中哪些内容？</li>
+</ol>
+<p>然后只把本次允许使用的内容交给学生行为生成器。</p>
+<p>如果把完整解题过程全部塞给大模型，再要求它“装作没学会”，学生很容易借助模型本身的能力，跳过你设计的学习过程。</p>
+<p>具体回想规则可以先简化，但必须标记为模拟假设，并进行校准；不能随意按年龄设一个固定遗忘比例。</p>
+<p><strong>第六步：更新记忆时，保留历史，不把过去改写掉。</strong></p>
+<p>后来学生连续独立做对了几道进位题：</p>
+<ul>
+<li>原来的“曾在提示下完成”仍然是真实经历，应保留；</li>
+<li>新增后续独立完成的经历；</li>
+<li>能力状态按学习与评估规则更新；</li>
+<li>“仍未解决的进位困惑”可以标记为已解决。</li>
+</ul>
+<p>不要为了体现进步，把旧记录改成“当时就已经掌握”。</p>
+<p>如果之前的摘要写错了，则进行修订，保留修改前后、来源事件及规则版本。</p>
+<p><strong>五、用一条记忆记录，说明研发实际要保存什么</strong></p>
+<p>下面是说明结构的示例，不是要求研发照搬字段名：</p>
+<pre><code class="language-json">{
+  &quot;memory_id&quot;: &quot;mem_001&quot;,
+  &quot;student_id&quot;: &quot;student_008&quot;,
+  &quot;simulation_run_id&quot;: &quot;run_001&quot;,
+  &quot;class_id&quot;: &quot;class_012&quot;,
+  &quot;type&quot;: &quot;learning_episode&quot;,
+  &quot;skill_id&quot;: &quot;two_digit_addition_carry&quot;,
+  &quot;task_id&quot;: &quot;task_027_plus_015&quot;,
+  &quot;source_event_ids&quot;: [&quot;event_101&quot;, &quot;event_102&quot;, &quot;event_103&quot;],
+  &quot;experience&quot;: &quot;先答32；老师提醒十位需加上进位1后，改答42。&quot;,
+  &quot;support&quot;: &quot;明确指出遗漏的进位步骤&quot;,
+  &quot;observed_outcome&quot;: &quot;提示后完成当前题&quot;,
+  &quot;evidence_type&quot;: &quot;observed&quot;,
+  &quot;status&quot;: &quot;active&quot;,
+  &quot;rule_version&quot;: &quot;memory_write_v1&quot;
+}
+</code></pre>
+<p>实际还需要时间戳等基础字段。这里最重要的是保留了 <strong>“提示后”</strong>，并且没有擅自加入“已经学会”。</p>
+<p>下一次做 <code>38 + 24</code> 时，程序需要同时考虑：</p>
+<ul>
+<li>当前能力是否支持独立进位；</li>
+<li>上次经历是否相关；</li>
+<li>本次可以回想起多少；</li>
+<li>有没有新的教师或助教提示。</li>
+</ul>
+<p>如果学生<strong>自己回想起旧课内容，并在本次没有外部提示的情况下完成</strong>，可以按规则记录为独立完成。若是同一道题再现，还应标记“见过此题”，不能把记住旧答案当作已经具备迁移能力。</p>
+<p><strong>六、三个 Agent 不能直接共用同一份“全知记忆”</strong></p>
+<p>它们可以引用同一批课堂事件，但各自应该有不同的可见范围：</p>
+<ul>
+<li>**学生记忆：**自己实际经历、听到、看到或获知的内容。</li>
+<li>**老师记忆：**观察到的学生表现、自己的教学决策、需要跟进的问题。</li>
+<li>**助教记忆：**发现的卡点、已经给过的帮助、学生后续回应及向老师的交接。</li>
+</ul>
+<p>例如，老师私下记录“怀疑学生没有理解十进制”，不应该自动成为学生的记忆。模拟系统为评估保存的隐藏能力状态，也不应该在未明确授权的情况下直接交给老师或助教。</p>
+<p>否则，三个 Agent 会共享不该知道的信息，课堂看起来顺畅，实际却失去了模拟价值。</p>
+<p>第一版的 PRD 可以这样定义：</p>
+<blockquote>
+<p><strong>学生记忆是从该学生实际可见的课堂事件中提取、带有来源和适用范围的经历记录。系统在相关情境下检索记忆，并依据模拟回想规则决定本次可使用的内容。记忆与能力状态共同影响学生行为，但接触过、记得或复述过某项内容，不直接等同于独立掌握。所有记忆形成、修订及调用均可追溯；跨学生、跨模拟运行和跨角色的信息访问受到明确限制。</strong></p>
+</blockquote>
+</div></details>
+</article><article class="chapter" id="memory-02">
+  <div class="chapter-heading"><span class="chapter-number">11</span><h2>学生记忆：一本经历小本子</h2><button class="copy-link" data-id="memory-02" aria-label="复制话题链接：学生记忆：一本经历小本子" title="复制此话题链接">↗</button></div>
+  <div class="question"><div class="speaker">用户 · 提问</div><div class="prose"><p><code>student_memories</code> 保存有来源、与这个学生有关、以后可能影响其行为的经历与信息
+这个我没有明白</p>
+</div></div><details class="answer" open><summary><span class="speaker">AI · 回答</span><span class="toggle-hint">展开 / 收起</span></summary><div class="prose"><p>你可以先把 <code>student_memories</code> 理解为：<strong>给这个模拟学生准备的一本“经历小本子”。下次上课时，程序会从里面挑出相关内容，让它知道自己以前经历过什么。</strong></p>
+<p>例如，今天发生了这件事：</p>
+<blockquote>
+<p>学生计算 <code>27 + 15</code>，回答 <code>32</code>。<br>老师提醒：“你忘了把进位的 1 加到十位上。”<br>学生把答案改成了 <code>42</code>。</p>
+</blockquote>
+<p>小本子里可以记一条：</p>
+<blockquote>
+<p><strong>我做过一道进位加法，曾经忘记加进位的 1，老师提醒后才做对。</strong></p>
+</blockquote>
+<p>你引用的那句话，其实是在说三个要求：</p>
+<ul>
+<li><strong>“有来源”</strong>：这件事确实发生过，系统能找到对应的课堂记录，不能凭空编造。</li>
+<li><strong>“与这个学生有关”</strong>：这是他自己经历过的事情。如果老师私下辅导了另一位学生，而他没有听到，就不能记成他的经历。</li>
+<li><strong>“以后可能影响行为”</strong>：下次遇到类似题目，这段经历可能让他主动检查进位，或者问：“是不是和上次忘记加那个 1 一样？”</li>
+</ul>
+<p>这里的“可能”很重要。<strong>记得自己以前错过，不代表下次一定能做对。</strong></p>
+<p>所以，这两个记录分别回答不同的问题：</p>
+<blockquote>
+<p><strong>记忆：</strong>“我以前遇到过什么？当时发生了什么？”<br><strong>能力：</strong>“现在再给我一道题，我能不能独立做出来？”</p>
+</blockquote>
+<p>还有一点：这个“小本子”实际上保存在你的数据库中。大模型每次回应前，由程序把相关记录提供给它，它才有依据表现出“记得上次的经历”。</p>
+</div></details>
+</article><article class="chapter" id="memory-03">
+  <div class="chapter-heading"><span class="chapter-number">12</span><h2>1v1 课堂：State、Thread 与 Checkpoint</h2><button class="copy-link" data-id="memory-03" aria-label="复制话题链接：1v1 课堂：State、Thread 与 Checkpoint" title="复制此话题链接">↗</button></div>
+  <div class="question"><div class="speaker">用户 · 提问</div><div class="prose"><p>langchain里面这部分，我也不懂：part of the agent’s state, persisted via thread-scoped checkpoints
+你给我按照1v1课堂，举个例子吧，怎么实现的</p>
+</div></div><details class="answer" open><summary><span class="speaker">AI · 回答</span><span class="toggle-hint">展开 / 收起</span></summary><div class="prose"><p>这句话可以翻译成：</p>
+<blockquote>
+<p><strong>把“这堂课进行到哪里了”放进 Agent 的当前工作记录中，并按照每堂课的编号，把这份记录存成可恢复的进度存档。</strong></p>
+</blockquote>
+<p>我们用一个 <strong>AI 老师给小明上 1v1 数学课</strong>的例子。先只看老师这一侧。</p>
+<p><strong>1．<code>agent’s state</code>：老师当前拿着的“课堂工作记录”</strong></p>
+<p>老师问：</p>
+<blockquote>
+<p>“小明，27＋15 等于多少？”</p>
+</blockquote>
+<p>学生回答：</p>
+<blockquote>
+<p>“32。”</p>
+</blockquote>
+<p>此时，程序中的 <code>state</code> 可以是下面这样。字段是我们自己设计的，并非 LangGraph 规定：</p>
+<pre><code class="language-json">{
+  &quot;student_id&quot;: &quot;xiaoming&quot;,
+  &quot;lesson_id&quot;: &quot;math_012&quot;,
+  &quot;current_question&quot;: &quot;27 + 15&quot;,
+  &quot;student_answer&quot;: &quot;32&quot;,
+  &quot;hints_given&quot;: [],
+  &quot;phase&quot;: &quot;准备反馈&quot;,
+  &quot;messages&quot;: [
+    {&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;27加15等于多少？&quot;},
+    {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;32&quot;}
+  ]
+}
+</code></pre>
+<p>这份记录包含两类信息：</p>
+<ul>
+<li><strong>刚刚说过什么：</strong><code>messages</code>，也就是会话内的短期记忆。</li>
+<li>**现在正在做什么：**当前题目、学生答案、已给提示、课堂阶段。</li>
+</ul>
+<p>所以，<strong>“memory 是 state 的一部分”</strong>，意思就是：<strong>对话历史是课堂工作记录的一部分，工作记录里还可以包含进度等其他信息。</strong><a href="https://docs.langchain.com/oss/python/concepts/memory" target="_blank" rel="noopener noreferrer">官方说明</a></p>
+<p>这里的 state 是程序里的数据，不是大模型参数。</p>
+<p><strong>2．<code>thread-scoped</code>：这份工作记录归属于哪一次课堂</strong></p>
+<p>我们可以约定：<strong>一堂课对应一个 thread</strong>。这是产品设计选择，不是框架强制要求。</p>
+<p>例如：</p>
+<pre><code class="language-text">学生编号：xiaoming
+本次课堂 thread_id：xiaoming_math_012
+</code></pre>
+<p>小明在这堂课里每回答一句，后端都使用同一个 <code>thread_id</code>。</p>
+<p>这样系统就知道：</p>
+<blockquote>
+<p>“这条新回答要接在小明第 12 节数学课后面。”</p>
+</blockquote>
+<p>另一个学生，或者小明的另一堂课，使用不同的 <code>thread_id</code>，分别保存进度。这里的 thread 可以理解为“一段持续的会话”，不是程序运行所说的 CPU 线程。</p>
+<p><strong>3．<code>checkpoint</code>：给课堂工作记录存一个档</strong></p>
+<p>接下来，老师给提示：</p>
+<blockquote>
+<p>“看看个位，7＋5＝12。除了在个位写 2，还有哪个数要加到十位上？”</p>
+</blockquote>
+<p>教学程序把这次提示加入 state，同时把阶段改为“等待学生重答”。</p>
+<p>此时可以保存一份新的进度存档：</p>
+<pre><code class="language-text">存档 A
+题目：27＋15
+学生回答：32
+已给提示：无
+当前阶段：准备反馈
+
+存档 B
+题目：27＋15
+学生回答：32
+已给提示：检查个位相加后的进位
+当前阶段：等待学生重答
+</code></pre>
+<p><strong>A、B 就是不同时间点的 checkpoint。</strong></p>
+<p>LangGraph 的 checkpoint 还包含恢复执行所需的信息。配置好 checkpointer 后，它会在工作流的执行步骤边界保存状态；不是按每个字、每一秒保存，也不一定恰好“一句话一个存档”。<a href="https://docs.langchain.com/oss/python/langgraph/checkpointers" target="_blank" rel="noopener noreferrer">官方 Checkpointer 文档</a></p>
+<p><strong>4．<code>persisted</code>：把存档真正写进数据库</strong></p>
+<p>假设存档 B 已经成功写入数据库，然后小明断线了。</p>
+<p>重新连接时，后端找到他正在上的课，继续使用：</p>
+<pre><code class="language-text">thread_id = xiaoming_math_012
+</code></pre>
+<p>程序读取这个 thread 的最新存档，就能恢复到：</p>
+<blockquote>
+<p>正在做 27＋15；学生之前答了 32；老师已经给过进位提示；现在等待学生重答。</p>
+</blockquote>
+<p>此时小明说：</p>
+<blockquote>
+<p>“我觉得是 42。”</p>
+</blockquote>
+<p>程序会把这句话接到恢复的状态后面。老师生成回应时，可以获得相关上下文：</p>
+<blockquote>
+<p>“对，这次你把进位的 1 也加上了。”</p>
+</blockquote>
+<p>同时，评估程序知道：<strong>这道题已经给过提示，不能当成完全无提示的独立作答。</strong></p>
+<p>这里有两个环节：</p>
+<ol>
+<li><strong>数据库恢复课堂记录。</strong></li>
+<li><strong>教学程序从记录中选取相关信息，提供给大模型。</strong></li>
+</ol>
+<p>把数据存下来，并不代表大模型就自动知道它；研发仍要编写读取和组装上下文的逻辑。</p>
+<p><strong>5．研发具体需要做什么？</strong></p>
+<p>可以分成四件事：</p>
+<ol>
+<li>**定义 state 的字段。**决定保存消息、当前题目、提示记录、课堂阶段等什么信息。</li>
+<li>**定义教学步骤如何更新 state。**比如收到答案后更新答案；给过提示后追加提示记录。</li>
+<li>**给 LangGraph 配置数据库存档器。**由它负责保存、读取 checkpoint。</li>
+<li>**让同一堂课的请求持续使用同一个 <code>thread_id</code>。**断线重连时，也要找回这个编号。</li>
+</ol>
+<p>关键接法大致如下，省略了具体教学节点：</p>
+<pre><code class="language-python"># builder：研发已经定义好的课堂流程
+# database_checkpointer：连接数据库的存档器
+graph = builder.compile(checkpointer=database_checkpointer)
+
+# 同一堂课一直使用这个编号
+config = {
+    &quot;configurable&quot;: {
+        &quot;thread_id&quot;: &quot;xiaoming_math_012&quot;
+    }
+}
+
+# 学生的新回答进入这堂课
+graph.invoke(
+    {&quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;我觉得是42&quot;}]},
+    config
+)
+</code></pre>
+<p>其中，<code>messages</code> 需要配置成“追加新消息”的更新方式，避免新回答覆盖之前的历史。</p>
+<p>如果希望服务重启后仍能恢复，需要使用数据库型 checkpointer。文档中的 <code>InMemorySaver</code> 只保存在进程内存里，重启后会丢失；官方提供 PostgreSQL 等持久化方案。<a href="https://docs.langchain.com/oss/python/langgraph/persistence" target="_blank" rel="noopener noreferrer">官方持久化说明</a></p>
+<p><strong>它和我们前面说的 <code>student_memories</code>，区别在哪里？</strong></p>
+<blockquote>
+<p><strong>Checkpoint：</strong>“小明这堂课做到这里了，接着往下上。”<br><strong>长期记忆：</strong>“小明以前有过这段学习经历，下次相关时可以用到。”</p>
+</blockquote>
+<p>下周开新课，如果使用新的 thread，就不会自动接着今天的 checkpoint 上课。但程序可以按小明的学生 ID，读取长期记忆中的“曾漏加进位，在提示后完成”，作为新课的参考。</p>
+<p>所以，**这里的“短期”主要指服务于当前会话，并不意味着一关网页就删除。**它可以存很久，但解决的首先是“这堂课如何连续进行”的问题。</p>
+</div></details>
+</article><article class="chapter" id="memory-04">
+  <div class="chapter-heading"><span class="chapter-number">13</span><h2>单次调用的上下文预算</h2><button class="copy-link" data-id="memory-04" aria-label="复制话题链接：单次调用的上下文预算" title="复制此话题链接">↗</button></div>
+  <div class="question"><div class="speaker">用户 · 提问</div><div class="prose"><p>另外，你提到的这个点，一般你建议LLM一次调用中，context的上线是多少？
+most LLMs still perform poorly over long contexts. They get “distracted” by stale or off-topic content, all while suffering from slower response times and higher costs.</p>
+</div></div><details class="answer" open><summary><span class="speaker">AI · 回答</span><span class="toggle-hint">展开 / 收起</span></summary><div class="prose"><p><strong>针对你的 1v1 实时课堂，第一版我建议：每个 Agent 单次调用的输入上下文，先以 4,000–8,000 tokens 为目标。</strong></p>
+<p>可以设置三个档位：</p>
+<ul>
+<li><strong>日常目标：4k–8k tokens。</strong></li>
+<li><strong>整理阈值：超过 12k，检查是否需要摘要、去重或缩小检索范围。</strong></li>
+<li>**初始应用上限：16k tokens。**超过后重新组织输入，而不是直接截掉最后一段。</li>
+</ul>
+<p>**这些数字是我建议的初始工程预算，不是研究证明的通用最优值，也不是超过 16k 模型就会出问题。**适用于普通课堂对话；整节课复盘、长文阅读等任务应另设预算。</p>
+<p><strong>1．先明确：这里计算哪些内容？</strong></p>
+<p>一次调用的输入，不仅是学生刚说的那句话，还包括：</p>
+<blockquote>
+<p>系统指令＋角色设定＋当前任务＋对话历史＋检索出的记忆＋工具定义与返回结果。</p>
+</blockquote>
+<p>Token 是模型处理文本的单位，<strong>不能直接等同于中文字数或英文单词数</strong>，应让研发用目标模型对应的计数工具测量。</p>
+<p>另外，还要为输出预留空间；输入、输出以及推理 token 如何占用额度，需要按所选模型的接口规则计算。</p>
+<p><strong>2．“模型装得下”与“课堂值得放这么多”，是两件事</strong></p>
+<p>模型的最大上下文窗口，是接口允许的容量。</p>
+<p>我们设的 8k 或 16k，是为了让课堂调用具备合适的效果、速度和成本。</p>
+<p>你引用的那句话，不应理解成“上下文越短一定越好”。**有用信息不足，同样会让模型表现变差。**真正需要控制的是过时、重复、无关或互相矛盾的内容。Anthropic 的工程建议也是尽量选取能够支撑任务的高信息量上下文，而不是单纯追求最短。<a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents" target="_blank" rel="noopener noreferrer">上下文工程说明</a></p>
+<p><strong>3．用你的数学课堂举例，8k 可以怎么分配？</strong></p>
+<p>假设这次调用是让老师回应学生的“27＋15＝32”。下面是一个预算示例，不要求把每项填满：</p>
+<ul>
+<li><strong>约 1.5k：角色职责、教学规则与必要的 Persona。</strong></li>
+<li><strong>约 1.5k：当前教学目标、题目、相关学生能力和已给提示。</strong></li>
+<li><strong>约 3k：当前解题过程与最近的相关对话。</strong></li>
+<li><strong>约 1k：更早的课堂摘要、相关长期记忆。</strong></li>
+<li><strong>约 1k：必要的工具信息及其他输入余量。</strong></li>
+</ul>
+<p>老师此刻需要知道的是：</p>
+<blockquote>
+<p>学生怎么得到 32、是否理解个位相加、已经给过哪些提示，以及下一步准备检查什么。</p>
+</blockquote>
+<p>未必需要知道的是：</p>
+<blockquote>
+<p>开课时完整的寒暄、前面已经结束的另一道题的全部对话、这个学生所有学科的历史经历。</p>
+</blockquote>
+<p>学生 Agent、老师 Agent、助教 Agent 应分别组装所需上下文，<strong>不是把三个角色的全部信息每次都发送给每一个 Agent。</strong></p>
+<p><strong>4．和刚才的 checkpoint 联系起来：保存完整，不等于每次全部发送</strong></p>
+<p>这点很关键：</p>
+<blockquote>
+<p><strong>数据库负责保存足够恢复课堂的信息；程序负责挑选这一次大模型调用需要的信息。</strong></p>
+</blockquote>
+<p>例如，课堂进行了 25 分钟，存档里的对话已经很长。下一次调用可以只提供：</p>
+<ul>
+<li>当前这道题的完整作答与提示过程；</li>
+<li>最近几轮相关对话；</li>
+<li>前面课堂的简短摘要；</li>
+<li>本次需要用到的少量长期记忆。</li>
+</ul>
+<p>不必删除数据库里的原始记录，也不必把整个 checkpoint 原样交给模型。</p>
+<p><strong>5．超过预算时，优先整理什么？</strong></p>
+<p>我建议按这个顺序处理：</p>
+<ol>
+<li>删除重复检索结果、无关材料和过长的工具返回。</li>
+<li>将已经结束的活动整理为摘要。</li>
+<li>缩小长期记忆的检索范围。</li>
+<li>如果当前任务本身确实很长，再考虑扩大预算或拆成多次调用。</li>
+</ol>
+<p>但要优先保留：</p>
+<blockquote>
+<p>当前题目、学生原始答案、关键错误、已经给过的帮助、当前等待什么，以及必须遵守的规则。</p>
+</blockquote>
+<p>例如，把“老师明确提示进位后，学生答对”摘要成“学生答对”，即使省了 token，也会破坏你的独立／帮助下完成判定。</p>
+<p><strong>6．最终上限怎么确定？让研发做课堂回放对比。</strong></p>
+<p>可以用同一批课堂片段，测试 <strong>4k、8k、16k</strong> 三种输入预算，观察：</p>
+<ul>
+<li>是否漏掉已经给过的提示；</li>
+<li>是否重复提问或忘记当前题目；</li>
+<li>是否混淆角色、错误判断学生能力；</li>
+<li>开始回应需要多久；</li>
+<li>每次及每节课的实际费用。</li>
+</ul>
+<p>如果 8k 与 16k 的教学表现接近，而 8k 更快、更便宜，就采用 8k。若某类课堂在 8k 下经常遗漏必要信息，则检查筛选方式，或者为这类任务提高预算。长上下文研究也提示，信息的位置会影响模型能否有效利用它，不能只看总长度。<a href="https://arxiv.org/abs/2307.03172" target="_blank" rel="noopener noreferrer">《Lost in the Middle》</a></p>
+<p>你现在可以在 PRD 中先写：</p>
+<blockquote>
+<p><strong>实时课堂调用的输入上下文目标为 4k–8k tokens；超过 12k 触发上下文整理，初始应用上限为 16k。预算按 Agent 和任务类型分别配置，并依据课堂回放中的教学表现、响应延迟和成本调整。数据库保留的课堂记录不受该输入预算限制。</strong></p>
+</blockquote>
+</div></details>
+</article><article class="chapter" id="memory-05">
+  <div class="chapter-heading"><span class="chapter-number">14</span><h2>语义、情景与程序性记忆</h2><button class="copy-link" data-id="memory-05" aria-label="复制话题链接：语义、情景与程序性记忆" title="复制此话题链接">↗</button></div>
+  <div class="question"><div class="speaker">用户 · 提问</div><div class="prose"><p>你把这个帮我翻译一下，并解释一下</p>
+<div class="table-scroll" role="region" aria-label="记忆类型对照表" tabindex="0"><table>
+<thead>
+<tr>
+<th align="left">Memory Type</th>
+<th align="left">What is Stored</th>
+<th align="left">Human Example</th>
+<th align="left">Agent Example</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><a href="https://docs.langchain.com/oss/python/concepts/memory#semantic-memory" target="_blank" rel="noopener noreferrer">Semantic</a></td>
+<td align="left">Facts</td>
+<td align="left">Things I learned in school</td>
+<td align="left">Facts about a user</td>
+</tr>
+<tr>
+<td align="left"><a href="https://docs.langchain.com/oss/python/concepts/memory#episodic-memory" target="_blank" rel="noopener noreferrer">Episodic</a></td>
+<td align="left">Experiences</td>
+<td align="left">Things I did</td>
+<td align="left">Past agent actions</td>
+</tr>
+<tr>
+<td align="left"><a href="https://docs.langchain.com/oss/python/concepts/memory#procedural-memory" target="_blank" rel="noopener noreferrer">Procedural</a></td>
+<td align="left">Instructions</td>
+<td align="left">Instincts or motor skills</td>
+<td align="left">Agent system prompt</td>
+</tr>
+</tbody></table></div>
+</div></div><details class="answer" open><summary><span class="speaker">AI · 回答</span><span class="toggle-hint">展开 / 收起</span></summary><div class="prose"><p>这张表是在<strong>按照“记住的内容有什么用途”分类</strong>。可以先记住这三句话：</p>
+<blockquote>
+<p><strong>Semantic：我知道什么。</strong><br><strong>Episodic：我经历过什么。</strong><br><strong>Procedural：我应该怎样做。</strong></p>
+</blockquote>
+<p>翻译如下：</p>
+<div class="table-scroll" role="region" aria-label="记忆类型对照表" tabindex="0"><table>
+<thead>
+<tr>
+<th align="left">记忆类型</th>
+<th align="left">保存什么</th>
+<th align="left">人类的例子</th>
+<th align="left">Agent 的例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>语义记忆（Semantic）</strong></td>
+<td align="left">事实、知识</td>
+<td align="left">我在学校学到的知识</td>
+<td align="left">关于某个用户的事实</td>
+</tr>
+<tr>
+<td align="left"><strong>情景记忆（Episodic）</strong></td>
+<td align="left">经历、事件</td>
+<td align="left">我曾经做过的事情</td>
+<td align="left">Agent 过去采取过的行动</td>
+</tr>
+<tr>
+<td align="left"><strong>程序性记忆（Procedural）</strong></td>
+<td align="left">行为指令</td>
+<td align="left">本能或动作技能</td>
+<td align="left">Agent 的系统提示词</td>
+</tr>
+</tbody></table></div>
+<p>这是一种帮助理解 Agent 的类比，不代表 Agent 的记忆机制与人脑完全相同。</p>
+<p><strong>1．语义记忆：记住“是什么”</strong></p>
+<p>它保存的是可以直接使用的信息，不一定包含“什么时候、在哪里知道的”。</p>
+<p>在人类身上，例如：</p>
+<blockquote>
+<p>“10 个一可以组成 1 个十。”</p>
+</blockquote>
+<p>在 AI 老师身上，例如：</p>
+<blockquote>
+<p>“小明正在读二年级。”<br>“小明的家庭语言是中文，课堂教学语言是英语。”</p>
+</blockquote>
+<p>老师下次见到小明时，可以使用这些信息，不必重新询问。</p>
+<p>这里的 <strong>semantic 不是指必须通过向量数据库或语义搜索保存</strong>，而是说保存的内容属于事实与知识。</p>
+<p><strong>2．情景记忆：记住“发生过什么”</strong></p>
+<p>它保存的是一次具体经历，通常带有时间、情境、行动和结果。</p>
+<p>例如：</p>
+<blockquote>
+<p>“上节数学课，小明计算 27＋15，先回答了 32。我提醒他检查进位后，他改成了 42。”</p>
+</blockquote>
+<p>这段记忆不仅有结果，还保留了过程：</p>
+<ul>
+<li>当时在做什么；</li>
+<li>谁采取了什么行动；</li>
+<li>后来发生了什么。</li>
+</ul>
+<p>所以，表中的 <strong>Past agent actions</strong>，可以理解为：</p>
+<blockquote>
+<p>“我这个 Agent 以前做过什么，以及当时产生了什么结果。”</p>
+</blockquote>
+<p>对于老师，是“我曾经这样提示学生”；对于学生，则是“我曾经在这样的提示下完成了题目”。</p>
+<p><strong>3．程序性记忆：记住“怎样行动”</strong></p>
+<p>在人类身上，例如会骑自行车、会打字。你不需要每次从头回忆所有步骤，就能执行这些技能。</p>
+<p>在 Agent 身上，文档用“系统提示词”作例子，是因为里面可以保存持续指导行为的规则。</p>
+<p>例如，AI 助教的系统提示词里写着：</p>
+<blockquote>
+<p>学生遇到困难时，先确认卡在哪里。<br>先给局部提示，让学生再试。<br>不要一开始就给完整答案。<br>记录实际给过的帮助。</p>
+</blockquote>
+<p>这些内容回答的是：</p>
+<blockquote>
+<p><strong>“遇到这种情况，我通常应该按什么方式处理？”</strong></p>
+</blockquote>
+<p>所以，Agent 的程序性记忆不一定来自过去的课堂，也可以一开始就由产品和研发设定。后续是否允许它修改，需要另行设计规则，不能因为学生说一句“以后直接告诉我答案”，就自动改写。</p>
+<p><strong>把三种记忆放进同一个 1v1 场景，会更清楚。</strong></p>
+<p>小明再次遇到进位题，AI 老师可以同时使用：</p>
+<ul>
+<li><strong>语义记忆：</strong>“小明是二年级学生，教学语言理解情况是这样……”</li>
+<li><strong>情景记忆：</strong>“上次他漏加了进位的 1，在提醒后改对。”</li>
+<li><strong>程序性记忆：</strong>“先让他独立尝试，根据实际表现决定是否给提示。”</li>
+</ul>
+<p>三者共同影响老师下一步怎样回应。</p>
+<p><strong>这也解释了它与你之前那四张数据库表的关系。</strong></p>
+<p>我们之前的 <code>student_memories</code> 主要强调的是<strong>情景记忆</strong>；<code>student_profiles</code> 中的一些背景事实，可以视为语义记忆；指导 Agent 行动的规则，则可以体现在系统提示词或程序逻辑中。</p>
+<p>**这三类是信息用途的分类，不是要求研发必须建立三张同名的表。**另外，“保存过进位知识”与“学生能够独立完成进位运算”仍然不同，后者还需要能力状态与作答证据来描述。</p>
+</div></details>
+</article><article class="chapter" id="memory-06">
+  <div class="chapter-heading"><span class="chapter-number">15</span><h2>LangChain 官方记忆文档学习笔记</h2><button class="copy-link" data-id="memory-06" aria-label="复制话题链接：LangChain 官方记忆文档学习笔记" title="复制此话题链接">↗</button></div>
+  <div class="question"><div class="speaker">用户 · 提问</div><div class="prose"><p>你提供的这个LangChain 官方记忆文档非常值得学习，你帮我总结一下，连接也保留着，我随时可以回看</p>
+</div></div><details class="answer" open><summary><span class="speaker">AI · 回答</span><span class="toggle-hint">展开 / 收起</span></summary><div class="prose"><p>可以。下面整理成一份方便回看的学习笔记，课堂例子是我结合你的产品做的说明。</p>
+<p><strong>原文入口：<a href="https://docs.langchain.com/oss/python/concepts/memory" target="_blank" rel="noopener noreferrer">LangChain 官方文档：Memory overview</a></strong></p>
+<p><strong>1．首先区分：记忆服务于“当前会话”，还是“跨会话”？</strong></p>
+<ul>
+<li>**短期记忆：**维持当前会话的连续性。</li>
+<li>**长期记忆：**让信息可以在不同会话中继续使用。</li>
+</ul>
+<p>对应到你的课堂：</p>
+<blockquote>
+<p>短期记忆：“这道题刚给过进位提示，现在等学生重答。”<br>长期记忆：“上节课学生曾漏加进位，在提示后完成。”</p>
+</blockquote>
+<p>这里的“短期”主要指使用范围，不代表关闭网页就删除。<a href="https://docs.langchain.com/oss/python/langgraph/persistence" target="_blank" rel="noopener noreferrer">查看持久化机制</a></p>
+<p><strong>2．短期记忆如何保存？记住四个词</strong></p>
+<ul>
+<li>**State：工作记录。**包含对话、当前任务、进度等程序需要的信息。</li>
+<li>**Thread：一段持续的会话。**我们可以约定一堂课对应一个 thread。</li>
+<li>**Checkpoint：进度存档。**记录某个执行时点的 state。</li>
+<li>**Checkpointer：存档器。**负责按 thread 保存和读取这些存档。</li>
+</ul>
+<p>因此，断线后使用同一个课堂编号，就可以恢复已保存的进度。要支持服务重启后的恢复，需要使用持久化存储，而不只是内存。<a href="https://docs.langchain.com/oss/python/langgraph/checkpointers" target="_blank" rel="noopener noreferrer">查看 Checkpointers</a></p>
+<p><strong>3．另一个分类维度：记忆里装的是什么？</strong></p>
+<ul>
+<li>**语义记忆 Semantic：事实与知识。**例如“小明的家庭语言是中文”。</li>
+<li>**情景记忆 Episodic：过去的经历。**例如“上次我提示进位后，小明改对了答案”。</li>
+<li>**程序性记忆 Procedural：指导行动的规则或机制。**例如“先确认卡点，再逐级提示”。文档讨论的实现载体包括提示词、代码和模型权重，不只限于系统提示词。</li>
+</ul>
+<p>这和“短期／长期”是不同的分类角度，不能把它们混成五种互斥的记忆。<a href="https://docs.langchain.com/oss/python/concepts/memory#long-term-memory" target="_blank" rel="noopener noreferrer">查看记忆类型</a></p>
+<p><strong>4．信息可以组织成“档案”，也可以组织成“记录集合”</strong></p>
+<p>文档在语义记忆部分介绍了两种组织方式：</p>
+<ul>
+<li>**Profile：集中维护一份档案。**读取方便，但档案变大后，更新容易遗漏或误改。</li>
+<li>**Collection：拆成多条记录。**方便逐条新增，但需要处理检索、重复和冲突。</li>
+</ul>
+<p>应用到你的产品，可以让基本背景集中保存，让具体课堂经历分条保存；不必所有信息都使用同一种结构。<a href="https://docs.langchain.com/oss/python/concepts/memory#semantic-memory" target="_blank" rel="noopener noreferrer">查看 Profile 与 Collection</a></p>
+<p><strong>5．记忆什么时候写入？有两条路径</strong></p>
+<ul>
+<li>**在当前处理流程中写入（Hot path）：**下一步立即能用，但可能增加等待时间。</li>
+<li>**在后台整理（Background）：**不阻塞眼前回应，但新记忆可能稍后才可用。</li>
+</ul>
+<p>我的课堂设计建议是：**当前题目、已给提示、等待谁回应等进度及时更新；较长的课堂总结可以后台生成。**不能把下一轮马上需要的信息全部拖到课后处理。<a href="https://docs.langchain.com/oss/python/concepts/memory#writing-memories" target="_blank" rel="noopener noreferrer">查看 Writing memories</a></p>
+<p><strong>6．长期记忆如何定位和读取？</strong></p>
+<p>LangGraph 的 Store 可以用以下方式组织信息：</p>
+<ul>
+<li><strong>Namespace：信息所属的分组。</strong></li>
+<li><strong>Key：分组中某条记录的标识。</strong></li>
+<li>**内容过滤或语义搜索：**找到本次相关的信息。</li>
+</ul>
+<p>例如，我们可以按“模拟运行＋学生编号＋记忆类型”分组，再查找与“进位加法”有关的经历。</p>
+<p>Namespace 帮助组织数据；哪些角色能够访问，还需要应用自身执行权限规则。<a href="https://docs.langchain.com/oss/python/langgraph/stores" target="_blank" rel="noopener noreferrer">查看 Stores</a></p>
+<p><strong>7．保存多少，与每次给模型多少，是两个问题</strong></p>
+<p>文档提醒：历史越来越长时，无关或过时内容可能影响表现，也会增加处理负担。因此，需要管理进入模型的上下文。<a href="https://docs.langchain.com/oss/python/concepts/memory#manage-short-term-memory" target="_blank" rel="noopener noreferrer">查看短期记忆管理</a></p>
+<p>对你的课堂，我建议：</p>
+<blockquote>
+<p>数据库保留可追溯的记录；每次调用只提供当前任务需要的信息。</p>
+</blockquote>
+<p>例如，本轮可以提供当前题目的完整过程，加上前面课堂的摘要，而不是反复发送整节课逐字记录。</p>
+<p>此前我提出的 <strong>4k–8k 输入目标、12k 整理阈值、16k 初始上限，是我们的工程起始建议，不是这份官方文档规定的标准。</strong></p>
+<p><strong>你写 PRD 时，可以用这六个问题检查 memory 设计是否完整：</strong></p>
+<ol>
+<li>需要记住什么，为什么以后有用？</li>
+<li>属于当前课堂，还是跨课堂信息？</li>
+<li>何时写入，下一轮是否必须立即可用？</li>
+<li>何时读取，怎样挑选相关内容？</li>
+<li>哪个学生、哪次模拟、哪个角色可以使用？</li>
+<li>信息错误、过时或重复时，怎样修订和追溯？</li>
+</ol>
+<p>对于你的模拟学生，还要额外保留一条：**“记得经历过”与“已经掌握能力”分开判断。**这属于我们课堂产品的设计要求，不能仅靠接入记忆框架自动获得。</p>
+</div></details>
 </article></div>
       <section id="personas" aria-labelledby="personas-title">
         <div class="persona-intro">
@@ -788,7 +1432,7 @@
         <div class="comment-actions"><button class="comment-button" data-open-comments aria-haspopup="dialog">写下留言</button><button class="view-comments" data-open-comments aria-haspopup="dialog">查看留言</button></div>
         <p class="comment-note">无需登录或填写昵称。留言公开可见。</p>
       </section>
-      <footer><span class="footer-mark">三 / CLASSROOM NOTES</span><p>仅收录 Agent 课堂构建方法相关的用户提问与正式答复；分享、网页生成、部署及页面维护对话不在收录范围内。</p><p>对话部分保留原始问答；Persona 图谱为 2026-10-06 根据后续讨论整理的设计补充。标题和目录为阅读辅助，讨论包含提案及后续修正，请结合上下文阅读。后续对话不会自动同步。</p><a href="#top">回到顶部 ↑</a></footer>
+      <footer><span class="footer-mark">三 / CLASSROOM NOTES</span><p>仅收录 Agent 课堂构建方法相关的用户提问与正式答复；分享、网页生成、部署及页面维护对话不在收录范围内。</p><p>对话部分保留原始问答，Memory 讨论更新至 2026-10-09；Persona 图谱为 2026-10-06 根据后续讨论整理的设计补充。标题、目录与流程图排版为阅读辅助，讨论包含提案及后续修正，请结合上下文阅读。后续对话不会自动同步。</p><a href="#top">回到顶部 ↑</a></footer>
     </main>
   </div>
   <dialog id="comment-drawer" class="comment-drawer" aria-labelledby="drawer-title">
@@ -853,7 +1497,7 @@
   });
   document.querySelector('#expand').addEventListener('click', () => answers.forEach(d => d.open = true));
   document.querySelector('#collapse').addEventListener('click', () => answers.forEach(d => d.open = false));
-  document.querySelectorAll('.toc a, .persona-shortcuts a').forEach(link => link.addEventListener('click', () => {
+  document.querySelectorAll('.toc a, .persona-shortcuts a, .memory-shortcuts a[href^="#"]').forEach(link => link.addEventListener('click', () => {
     if (search.value) { search.value = ''; search.dispatchEvent(new Event('input')); }
     document.querySelector(link.getAttribute('href'))?.querySelectorAll('details').forEach(d => d.open = true);
   }));

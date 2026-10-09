@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="AI 课堂设计讨论，以及学生、老师、助教三个 Agent 的 Persona 结构图谱：21 个模块的构建步骤、运行机制与行为边界。">
+  <meta name="description" content="AI 课堂设计讨论：三角色 Persona 图谱，以及 Memory 机制、1v1 课堂存档、上下文预算、记忆分类与 LangChain 官方文档笔记。">
   <meta name="theme-color" content="#f6f5ef">
   <title>{{TITLE}}</title>
   <style>{{CSS}}</style>
@@ -11,7 +11,7 @@
 <body>
   <div class="reading-progress" aria-hidden="true"></div>
   <a class="skip-link" href="#main">跳到对话正文</a>
-  <header class="topbar"><a class="brand" href="#top"><span class="brand-icon">三</span> CLASSROOM NOTES</a><span class="edition">设计讨论 · {{DATE}}</span><button class="comment-entry" data-open-comments aria-haspopup="dialog">留言讨论</button><a class="source" href="https://github.com/RosannaBebe/ai-classroom-dialogue" target="_blank" rel="noopener noreferrer">GitHub ↗</a></header>
+  <header class="topbar"><a class="brand" href="#top"><span class="brand-icon">三</span> CLASSROOM NOTES</a><span class="edition">更新至 · {{UPDATED}}</span><button class="comment-entry" data-open-comments aria-haspopup="dialog">留言讨论</button><a class="source" href="https://github.com/RosannaBebe/ai-classroom-dialogue" target="_blank" rel="noopener noreferrer">GitHub ↗</a></header>
   <div class="layout" id="top">
     <aside class="sidebar" aria-label="阅读工具和话题目录">
       <div class="sidebar-inner">
@@ -30,7 +30,13 @@
         <p class="hero-description">关于 AI 老师、AI 助教与 AI 学生的设计讨论。<br class="desktop-break">从学生 Persona 出发，一步步走向可追溯的学习模拟。</p>
         <div class="roles"><span><i class="role-dot teacher"></i>老师 · 引导教学</span><span><i class="role-dot assistant"></i>助教 · 提供支持</span><span><i class="role-dot student"></i>学生 · 模拟学习</span></div>
         <nav class="persona-shortcuts" aria-label="直达 Persona 结构图谱">{{PERSONA_LINKS}}</nav>
-        <div class="hero-meta"><span>{{TOPIC_COUNT}} 个话题</span><span>{{MESSAGE_COUNT}} 条原始消息</span><span>{{DATE}} 快照</span></div>
+        <aside class="memory-intro" aria-label="Memory 新增讨论">
+          <div class="eyebrow"><span></span> 新增讨论 · {{UPDATED}}</div>
+          <h2>让经历延续到下一次课堂。</h2>
+          <p>6 组 Memory 问答：记忆存什么、何时读写、1v1 课堂如何恢复进度，以及怎样选择本次调用的上下文。</p>
+          <nav class="memory-shortcuts" aria-label="直达 Memory 内容"><a href="#memory-01">阅读 Memory 讨论 ↗</a><a href="#memory-06">查看官方文档笔记 ↗</a><a href="https://docs.langchain.com/oss/python/concepts/memory" target="_blank" rel="noopener noreferrer">LangChain 官方原文 ↗</a></nav>
+        </aside>
+        <div class="hero-meta"><span>{{TOPIC_COUNT}} 个话题</span><span>{{MESSAGE_COUNT}} 条原始消息</span><span>{{UPDATED}} 快照</span></div>
       </section>
       <div class="reading-toolbar"><span>Agent 构建讨论 · 按原始顺序保留</span><div><button id="expand">展开回答</button><button id="collapse">收起回答</button></div></div>
       <p id="empty" hidden>没有找到相关话题。试试“记忆”“学习规则”或“独立完成”。</p>
@@ -53,7 +59,7 @@
         <div class="comment-actions"><button class="comment-button" data-open-comments aria-haspopup="dialog">写下留言</button><button class="view-comments" data-open-comments aria-haspopup="dialog">查看留言</button></div>
         <p class="comment-note">无需登录或填写昵称。留言公开可见。</p>
       </section>
-      <footer><span class="footer-mark">三 / CLASSROOM NOTES</span><p>{{SCOPE}}</p><p>对话部分保留原始问答；Persona 图谱为 {{PERSONA_DATE}} 根据后续讨论整理的设计补充。标题和目录为阅读辅助，讨论包含提案及后续修正，请结合上下文阅读。后续对话不会自动同步。</p><a href="#top">回到顶部 ↑</a></footer>
+      <footer><span class="footer-mark">三 / CLASSROOM NOTES</span><p>{{SCOPE}}</p><p>对话部分保留原始问答，Memory 讨论更新至 {{UPDATED}}；Persona 图谱为 {{PERSONA_DATE}} 根据后续讨论整理的设计补充。标题、目录与流程图排版为阅读辅助，讨论包含提案及后续修正，请结合上下文阅读。后续对话不会自动同步。</p><a href="#top">回到顶部 ↑</a></footer>
     </main>
   </div>
   <dialog id="comment-drawer" class="comment-drawer" aria-labelledby="drawer-title">
